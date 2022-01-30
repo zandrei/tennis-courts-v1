@@ -1,20 +1,21 @@
 package com.tenniscourts;
 
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AdminCreateScheduleSlotTest {
+class AdminCreateScheduleSlotTest {
 
   public static final LocalDateTime NOW = LocalDateTime.now();
   public static final TimeSlot ONE_HOUR_AGO_TIME_SLOT = TimeSlot.of(NOW.minus(1, ChronoUnit.HOURS));
   private final Court arthurAshe = new Court(1L, "Arthur Ashe");
 
   @Test
-  public void
+  void
       courtSchedulerHasOneCourtScheduleSlot_GivenAnInitialEmptySchedule_WhenAddingOneScheduleForACourt() {
     final var courtScheduler = new CourtScheduler();
 
@@ -27,7 +28,7 @@ public class AdminCreateScheduleSlotTest {
   }
 
   @Test
-  public void
+  void
       courtSchedulerHasTwoSlotsAvailableForScheduleForSameCourt_GivenInitialEmptySchedule_WhenAddingTwoDifferentTimeSlotsForSameCourt() {
     final var courtScheduler = new CourtScheduler();
     final var currentTimeSlot = TimeSlot.of(NOW);
