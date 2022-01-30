@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 public class CourtScheduler {
@@ -13,10 +12,6 @@ public class CourtScheduler {
   private final HashMap<Court, List<CourtScheduleSlot>> courtScheduleSlots = new HashMap<>();
 
   CourtScheduler() {}
-
-  public List<CourtScheduleSlot> getFreeScheduleSlots() {
-    return emptyList();
-  }
 
   public void createScheduleSlot(Court court, TimeSlot timeSlot) {
     if (timeSlotIsInvalidForCourt(court, timeSlot)) {
