@@ -1,5 +1,6 @@
 package com.tenniscourts;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -18,9 +19,9 @@ public class CourtScheduler {
   }
 
   public void createScheduleSlot(Court court, TimeSlot timeSlot) {
-
     final var courtScheduleSlot = new CourtScheduleSlot(court, timeSlot);
-    courtScheduleSlots.put(court, List.of(courtScheduleSlot));
+    courtScheduleSlots.putIfAbsent(court, new ArrayList<>());
+    courtScheduleSlots.get(court).add(courtScheduleSlot);
   }
 
   public List<CourtScheduleSlot> getCourtScheduleSlots() {
