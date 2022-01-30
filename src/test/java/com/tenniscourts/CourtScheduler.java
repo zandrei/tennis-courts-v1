@@ -9,13 +9,9 @@ import static java.util.stream.Collectors.toList;
 
 public class CourtScheduler {
 
-  private final HashMap<Court, List<CourtScheduleSlot>> courtScheduleSlots =
-      new HashMap<Court, List<CourtScheduleSlot>>();
-  private CourtFinder courtFinder;
+  private final HashMap<Court, List<CourtScheduleSlot>> courtScheduleSlots = new HashMap<>();
 
-  CourtScheduler(CourtFinder courtFinder) {
-    this.courtFinder = courtFinder;
-  }
+  CourtScheduler() {}
 
   public List<CourtScheduleSlot> getFreeScheduleSlots() {
     return emptyList();
