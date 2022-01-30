@@ -19,9 +19,18 @@ public class CourtScheduler {
   }
 
   public void createScheduleSlot(Court court, TimeSlot timeSlot) {
+    if (timeSlotIsInvalidForCourt(court, timeSlot)) {
+      throw new IllegalArgumentException(
+          "Cannot add the same time slot multiple times for a single court!");
+    }
     final var courtScheduleSlot = new CourtScheduleSlot(court, timeSlot);
     courtScheduleSlots.putIfAbsent(court, new ArrayList<>());
     courtScheduleSlots.get(court).add(courtScheduleSlot);
+  }
+
+  private boolean timeSlotIsInvalidForCourt(Court court, TimeSlot timeSlot) {
+    return courtScheduleSlots.containsKey(court)
+        && courtScheduleSlots.get(court).contains(new CourtScheduleSlot(court, timeSlot));
   }
 
   public List<CourtScheduleSlot> getCourtScheduleSlots() {

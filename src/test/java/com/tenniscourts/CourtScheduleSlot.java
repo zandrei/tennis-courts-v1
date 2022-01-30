@@ -1,19 +1,11 @@
 package com.tenniscourts;
 
+import lombok.EqualsAndHashCode;
+import lombok.Value;
+
+@EqualsAndHashCode
+@Value
 public class CourtScheduleSlot {
-  private Court court;
-  private TimeSlot timeSlot;
-
-  public CourtScheduleSlot(Court court, TimeSlot timeSlot) {
-    this.court = court;
-    this.timeSlot = timeSlot;
-  }
-
-  public Court getCourt() {
-    return court;
-  }
-
-  public TimeSlot getTimeSlot() {
-    return timeSlot;
-  }
+  Court court;
+  TimeSlot timeSlot;
 }
