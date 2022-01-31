@@ -2,6 +2,7 @@ package com.tenniscourts;
 
 import lombok.Value;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,8 +33,9 @@ public class ReservationSystem {
         return bookings;
     }
 
-    public void bookCourtForPlayerAtTime(Court court, Player player, TimeSlot timeSlot) {
-        final var booking = new Booking(court, player, timeSlot);
+    public void bookCourtForPlayerOnDateAtTime(
+            Court court, Player player, LocalDate bookingDate, TimeSlot timeSlot) {
+        final var booking = new Booking(court, player, bookingDate, timeSlot);
         bookings.add(booking);
     }
 
@@ -41,6 +43,7 @@ public class ReservationSystem {
     public static class Booking {
         Court court;
         Player player;
+        LocalDate bookingDate;
         TimeSlot timeSlot;
 
         public boolean isForScheduleSlot(CourtScheduleSlot courtScheduleSlot) {

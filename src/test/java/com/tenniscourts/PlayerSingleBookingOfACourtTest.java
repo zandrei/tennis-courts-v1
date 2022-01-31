@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,7 +28,7 @@ class PlayerSingleBookingOfACourtTest {
         courtScheduler.createScheduleSlot(arthurAshe, timeslotForNow);
         ReservationSystem reservationSystem = new ReservationSystem(courtScheduler);
 
-        reservationSystem.bookCourtForPlayerAtTime(arthurAshe, new Player(10L), timeslotForNow);
+        reservationSystem.bookCourtForPlayerOnDateAtTime(arthurAshe, new Player(10L), LocalDate.now(), timeslotForNow);
 
         assertThat(reservationSystem.getFreeScheduleSlots()).isEmpty();
         final var allBookingsForCourt = reservationSystem.getAllBookingsForCourt(arthurAshe);

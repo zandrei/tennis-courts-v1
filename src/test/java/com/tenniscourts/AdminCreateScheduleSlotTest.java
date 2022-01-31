@@ -25,12 +25,12 @@ class AdminCreateScheduleSlotTest {
     void test() {
         final var courtScheduler = new CourtScheduler();
 
-        courtScheduler.createScheduleSlot(arthurAshe, TimeSlot.of(NOW));
+        courtScheduler.createScheduleSlot(arthurAshe, CURRENT_TIME_SLOT);
 
         assertThat(courtScheduler.getCourtScheduleSlots()).hasSize(1);
         final var courtScheduleSlot = courtScheduler.getCourtScheduleSlots().get(0);
         assertThat(courtScheduleSlot.getCourt()).isEqualTo(arthurAshe);
-        assertThat(courtScheduleSlot.getTimeSlot()).isEqualTo(TimeSlot.of(NOW));
+        assertThat(courtScheduleSlot.getTimeSlot()).isEqualTo(CURRENT_TIME_SLOT);
     }
 
     @Test
@@ -58,9 +58,9 @@ class AdminCreateScheduleSlotTest {
             "Throws IllegalArgumentException given an initial empty schedule and trying to add the same time slot for the same court two times")
     void test2() {
         final var courtScheduler = new CourtScheduler();
-        courtScheduler.createScheduleSlot(arthurAshe, TimeSlot.of(NOW));
+        courtScheduler.createScheduleSlot(arthurAshe, CURRENT_TIME_SLOT);
 
-        assertThatThrownBy(() -> courtScheduler.createScheduleSlot(arthurAshe, TimeSlot.of(NOW)))
+        assertThatThrownBy(() -> courtScheduler.createScheduleSlot(arthurAshe, CURRENT_TIME_SLOT))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
