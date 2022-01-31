@@ -6,6 +6,6 @@ import lombok.Value;
 @EqualsAndHashCode
 @Value
 public class CourtScheduleSlot {
-  Court court;
-  TimeSlot timeSlot;
+    Court court;
+    TimeSlot timeSlot;
 }

@@ -18,19 +18,19 @@ import java.time.LocalDateTime;
 @EntityListeners(CustomAuditEntityListener.class)
 public class BaseEntity<ID> implements Serializable {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private ID id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private ID id;
 
-  @Column private String ipNumberUpdate;
+    @Column private String ipNumberUpdate;
 
-  @Column private Long userCreate;
+    @Column private Long userCreate;
 
-  @Column private Long userUpdate;
+    @Column private Long userUpdate;
 
-  @Column @LastModifiedDate private LocalDateTime dateUpdate;
+    @Column @LastModifiedDate private LocalDateTime dateUpdate;
 
-  @Column private String ipNumberCreate;
+    @Column private String ipNumberCreate;
 
-  @Column @CreatedDate private LocalDateTime dateCreate;
+    @Column @CreatedDate private LocalDateTime dateCreate;
 }

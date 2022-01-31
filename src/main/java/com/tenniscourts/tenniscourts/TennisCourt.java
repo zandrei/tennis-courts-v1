@@ -18,5 +18,5 @@ import javax.validation.constraints.NotNull;
 @ToString
 public class TennisCourt extends BaseEntity<Long> {
 
-  @Column @NotNull private String name;
+    @Column @NotNull private String name;
 }

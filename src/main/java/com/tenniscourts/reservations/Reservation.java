@@ -22,13 +22,13 @@ import java.math.BigDecimal;
 @Builder
 public class Reservation extends BaseEntity<Long> {
 
-  @OneToOne private Guest guest;
+    @OneToOne private Guest guest;
 
-  @ManyToOne @NotNull private Schedule schedule;
+    @ManyToOne @NotNull private Schedule schedule;
 
-  @NotNull private BigDecimal value;
+    @NotNull private BigDecimal value;
 
-  @NotNull private ReservationStatus reservationStatus = ReservationStatus.READY_TO_PLAY;
+    @NotNull private ReservationStatus reservationStatus = ReservationStatus.READY_TO_PLAY;
 
-  private BigDecimal refundValue;
+    private BigDecimal refundValue;
 }

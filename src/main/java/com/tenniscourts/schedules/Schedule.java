@@ -21,20 +21,20 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true, exclude = "reservations")
 public class Schedule extends BaseEntity<Long> {
 
-  @ManyToOne @NotNull private TennisCourt tennisCourt;
+    @ManyToOne @NotNull private TennisCourt tennisCourt;
 
-  @Column @NotNull private LocalDateTime startDateTime;
+    @Column @NotNull private LocalDateTime startDateTime;
 
-  @Column @NotNull private LocalDateTime endDateTime;
+    @Column @NotNull private LocalDateTime endDateTime;
 
-  @OneToMany private List<Reservation> reservations;
+    @OneToMany private List<Reservation> reservations;
 
-  public void addReservation(Reservation reservation) {
-    if (this.reservations == null) {
-      this.reservations = new ArrayList<>();
+    public void addReservation(Reservation reservation) {
+        if (this.reservations == null) {
+            this.reservations = new ArrayList<>();
+        }
+
+        reservation.setSchedule(this);
+        this.reservations.add(reservation);
     }
-
-    reservation.setSchedule(this);
-    this.reservations.add(reservation);
-  }
 }

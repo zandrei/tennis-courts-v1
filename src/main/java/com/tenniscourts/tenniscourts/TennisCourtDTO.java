@@ -14,9 +14,9 @@ import java.util.List;
 @AllArgsConstructor
 public class TennisCourtDTO {
 
-  private Long id;
+    private Long id;
 
-  @NotNull private String name;
+    @NotNull private String name;
 
-  private List<ScheduleDTO> tennisCourtSchedules;
+    private List<ScheduleDTO> tennisCourtSchedules;
 }

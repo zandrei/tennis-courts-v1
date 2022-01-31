@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
 @Setter
 public class CreateScheduleRequestDTO {
 
-  @NotNull private Long tennisCourtId;
+    @NotNull private Long tennisCourtId;
 
-  @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-  @NotNull
-  private LocalDateTime startDateTime;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @NotNull
+    private LocalDateTime startDateTime;
 }

@@ -11,35 +11,35 @@ import java.util.Objects;
 
 public class CustomAuditEntityListener {
 
-  public static final Long USER_SYSTEM_ID = 1L;
+    public static final Long USER_SYSTEM_ID = 1L;
 
-  @PreUpdate
-  public void preUpdate(BaseEntity baseEntity) throws UnknownHostException {
+    @PreUpdate
+    public void preUpdate(BaseEntity baseEntity) throws UnknownHostException {
 
-    baseEntity.setDateUpdate(LocalDateTime.now());
-    if (Objects.isNull(baseEntity.getUserUpdate())) {
-      baseEntity.setUserUpdate(USER_SYSTEM_ID);
+        baseEntity.setDateUpdate(LocalDateTime.now());
+        if (Objects.isNull(baseEntity.getUserUpdate())) {
+            baseEntity.setUserUpdate(USER_SYSTEM_ID);
+        }
+        if (Objects.isNull(baseEntity.getIpNumberUpdate())) {
+            baseEntity.setIpNumberUpdate(InetAddress.getLocalHost().getHostAddress());
+        }
     }
-    if (Objects.isNull(baseEntity.getIpNumberUpdate())) {
-      baseEntity.setIpNumberUpdate(InetAddress.getLocalHost().getHostAddress());
-    }
-  }
 
-  @PrePersist
-  public void prePersist(BaseEntity baseEntity) throws UnknownHostException {
-    baseEntity.setDateUpdate(LocalDateTime.now());
-    if (Objects.isNull(baseEntity.getUserUpdate())) {
-      baseEntity.setUserUpdate(USER_SYSTEM_ID);
+    @PrePersist
+    public void prePersist(BaseEntity baseEntity) throws UnknownHostException {
+        baseEntity.setDateUpdate(LocalDateTime.now());
+        if (Objects.isNull(baseEntity.getUserUpdate())) {
+            baseEntity.setUserUpdate(USER_SYSTEM_ID);
+        }
+        baseEntity.setDateCreate(LocalDateTime.now());
+        if (Objects.isNull(baseEntity.getUserCreate())) {
+            baseEntity.setUserCreate(USER_SYSTEM_ID);
+        }
+        if (Objects.isNull(baseEntity.getIpNumberCreate())) {
+            baseEntity.setIpNumberUpdate(InetAddress.getLocalHost().getHostAddress());
+        }
+        if (Objects.isNull(baseEntity.getIpNumberCreate())) {
+            baseEntity.setIpNumberCreate(InetAddress.getLocalHost().getHostAddress());
+        }
     }
-    baseEntity.setDateCreate(LocalDateTime.now());
-    if (Objects.isNull(baseEntity.getUserCreate())) {
-      baseEntity.setUserCreate(USER_SYSTEM_ID);
-    }
-    if (Objects.isNull(baseEntity.getIpNumberCreate())) {
-      baseEntity.setIpNumberUpdate(InetAddress.getLocalHost().getHostAddress());
-    }
-    if (Objects.isNull(baseEntity.getIpNumberCreate())) {
-      baseEntity.setIpNumberCreate(InetAddress.getLocalHost().getHostAddress());
-    }
-  }
 }
