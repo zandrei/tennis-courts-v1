@@ -27,16 +27,14 @@ class PlayerReadCourtSchedulesTest {
 
     @Test
     @DisplayName(
-            "Returns one empty schedule slot from the reservation system, given a court scheduler with a single scheduled slot for a court")
+            "Returns one free schedule slot from the reservation system, given a court scheduler with a single scheduled slot for a court")
     void test1() {
-        courtScheduler.createScheduleSlot(
-                new Court(1L, "Arthur Ashe"), TimeSlot.of(LocalDateTime.now()));
+        final var currentTimeSlot = TimeSlot.of(LocalDateTime.now());
+        courtScheduler.createScheduleSlot(new Court(1L, "Arthur Ashe"), currentTimeSlot);
         final var reservationSystem = new ReservationSystem(courtScheduler);
 
         assertThat(reservationSystem.getFreeScheduleSlots()).hasSize(1);
         assertThat(reservationSystem.getFreeScheduleSlots().get(0))
-                .isEqualTo(
-                        new CourtScheduleSlot(
-                                new Court(1L, "Arthur Ashe"), TimeSlot.of(LocalDateTime.now())));
+                .isEqualTo(new CourtScheduleSlot(new Court(1L, "Arthur Ashe"), currentTimeSlot));
     }
 }

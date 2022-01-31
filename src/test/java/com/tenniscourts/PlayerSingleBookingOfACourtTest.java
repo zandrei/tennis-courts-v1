@@ -1,5 +1,6 @@
 package com.tenniscourts;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -10,15 +11,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 class PlayerSingleBookingOfACourtTest {
 
     private final Court arthurAshe = new Court(1L, "Arthur Ashe");
+    private CourtScheduler courtScheduler;
+
+    @BeforeEach
+    void setUp() {
+        courtScheduler = new CourtScheduler();
+    }
 
     @Test
     @DisplayName(
             "Can create a booking for a court at a specific timeslot by a single player,"
                     + "given a reservation system with one available time slot for a court")
     void test() {
-        ReservationSystem reservationSystem = new ReservationSystem(new CourtScheduler());
-
         final var timeslotForNow = TimeSlot.of(LocalDateTime.now());
+        courtScheduler.createScheduleSlot(arthurAshe, timeslotForNow);
+        ReservationSystem reservationSystem = new ReservationSystem(courtScheduler);
+
         reservationSystem.bookCourtForPlayerAtTime(arthurAshe, new Player(10L), timeslotForNow);
 
         assertThat(reservationSystem.getFreeScheduleSlots()).isEmpty();

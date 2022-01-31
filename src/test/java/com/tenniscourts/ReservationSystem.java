@@ -5,6 +5,8 @@ import lombok.Value;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 public class ReservationSystem {
 
     private final CourtScheduler courtScheduler;
@@ -16,7 +18,22 @@ public class ReservationSystem {
     }
 
     public List<CourtScheduleSlot> getFreeScheduleSlots() {
-        return courtScheduler.getCourtScheduleSlots();
+        final var courtScheduleSlots = courtScheduler.getCourtScheduleSlots();
+        return courtScheduleSlots.stream()
+                .filter(
+                        courtScheduleSlot ->
+                                bookings.stream()
+                                        .noneMatch(
+                                                booking ->
+                                                        booking.getCourt()
+                                                                        .equals(
+                                                                                courtScheduleSlot
+                                                                                        .getCourt())
+                                                                && booking.getTimeSlot()
+                                                                        .equals(
+                                                                                courtScheduleSlot
+                                                                                        .getTimeSlot())))
+                .collect(toList());
     }
 
     public List<Booking> getAllBookingsForCourt(Court court) {
