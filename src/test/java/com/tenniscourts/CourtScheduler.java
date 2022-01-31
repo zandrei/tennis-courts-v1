@@ -3,6 +3,7 @@ package com.tenniscourts;
 import lombok.Getter;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.*;
 
 import static java.util.Collections.emptyList;
@@ -82,6 +83,12 @@ public class CourtScheduler {
 
         public List<CourtScheduleSlot> getAllSlots() {
             return dailySlots.values().stream().flatMap(Collection::stream).collect(toList());
+        }
+
+        public boolean hasScheduleSlot(LocalDate date, TimeSlot timeSlot) {
+            return dailySlots.getOrDefault(date.getDayOfWeek(), emptyList()).stream()
+                    .anyMatch(
+                            courtScheduleSlot -> courtScheduleSlot.getTimeSlot().equals(timeSlot));
         }
     }
 }

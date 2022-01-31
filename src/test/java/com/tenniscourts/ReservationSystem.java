@@ -5,6 +5,7 @@ import lombok.Value;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -35,6 +36,10 @@ public class ReservationSystem {
 
     public void bookCourtForPlayerOnDateAtTime(
             Court court, Player player, LocalDate bookingDate, TimeSlot timeSlot) {
+        final var courtSchedule = courtScheduler.getCourtSchedule(court);
+        if (courtSchedule.isPresent() && !courtSchedule.get().hasScheduleSlot(bookingDate, timeSlot)) {
+            throw new IllegalArgumentException("Court schedule is not available on the requested date and timeslot!");
+        }
         final var booking = new Booking(court, player, bookingDate, timeSlot);
         bookings.add(booking);
     }
