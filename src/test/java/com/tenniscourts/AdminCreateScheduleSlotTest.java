@@ -1,10 +1,13 @@
 package com.tenniscourts;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -78,6 +81,16 @@ class AdminCreateScheduleSlotTest {
                 courtScheduler, new CourtScheduleSlot(arthurAshe, CURRENT_TIME_SLOT));
         assertSchedulerContainsInterestedCourtScheduleSlot(
                 courtScheduler, new CourtScheduleSlot(rodLaver, CURRENT_TIME_SLOT));
+    }
+
+    @Test
+    @DisplayName("Creates court schedule slots for the same court for MONDAY and WEDNESDAY")
+    @Disabled("Refactoring")
+    void test4() {
+        final var courtScheduler = new CourtScheduler();
+
+        courtScheduler.createScheduleSlot(arthurAshe, CURRENT_TIME_SLOT, List.of(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY));
+        assertThat(courtScheduler.getCourtScheduleSlots()).hasSize(2);
     }
 
     private void assertSchedulerContainsInterestedCourtScheduleSlot(

@@ -1,5 +1,6 @@
 package com.tenniscourts;
 
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -30,5 +31,8 @@ public class CourtScheduler {
 
     public List<CourtScheduleSlot> getCourtScheduleSlots() {
         return courtScheduleSlots.values().stream().flatMap(Collection::stream).collect(toList());
+    }
+
+    public void createScheduleSlot(Court court, TimeSlot timeSlot, List<DayOfWeek> availableForDays) {
     }
 }
