@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,7 +29,7 @@ class PlayerReadCourtSchedulesTest {
     @DisplayName(
             "Returns one free schedule slot from the reservation system, given a court scheduler with a single scheduled slot for a court")
     void test1() {
-        final var currentTimeSlot = TimeSlot.of(LocalDateTime.now());
+        final var currentTimeSlot = TimeSlot.of(LocalTime.now());
         courtScheduler.createScheduleSlot(new Court(1L, "Arthur Ashe"), currentTimeSlot);
         final var reservationSystem = new ReservationSystem(courtScheduler);
 

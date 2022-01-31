@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,7 +23,7 @@ class PlayerSingleBookingOfACourtTest {
             "Can create a booking for a court at a specific timeslot by a single player,"
                     + "given a reservation system with one available time slot for a court")
     void test() {
-        final var timeslotForNow = TimeSlot.of(LocalDateTime.now());
+        final var timeslotForNow = TimeSlot.of(LocalTime.now());
         courtScheduler.createScheduleSlot(arthurAshe, timeslotForNow);
         ReservationSystem reservationSystem = new ReservationSystem(courtScheduler);
 

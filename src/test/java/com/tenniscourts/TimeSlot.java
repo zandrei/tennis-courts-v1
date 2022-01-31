@@ -1,16 +1,16 @@
 package com.tenniscourts;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Objects;
 
 public class TimeSlot {
-    private final LocalDateTime startTime;
+    private final LocalTime startTime;
 
-    TimeSlot(LocalDateTime startTime) {
+    TimeSlot(LocalTime startTime) {
         this.startTime = startTime;
     }
 
-    public static TimeSlot of(LocalDateTime startTime) {
+    public static TimeSlot of(LocalTime startTime) {
         return new TimeSlot(startTime);
     }
 

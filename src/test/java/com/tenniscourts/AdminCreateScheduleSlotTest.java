@@ -3,7 +3,7 @@ package com.tenniscourts;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AdminCreateScheduleSlotTest {
 
-    private static final LocalDateTime NOW = LocalDateTime.now();
+    private static final LocalTime NOW = LocalTime.now();
     private static final TimeSlot CURRENT_TIME_SLOT = TimeSlot.of(NOW);
     private static final TimeSlot ONE_HOUR_AGO_TIME_SLOT =
             TimeSlot.of(NOW.minus(1, ChronoUnit.HOURS));
