@@ -20,20 +20,12 @@ public class ReservationSystem {
     public List<CourtScheduleSlot> getFreeScheduleSlots() {
         final var courtScheduleSlots = courtScheduler.getCourtScheduleSlots();
         return courtScheduleSlots.stream()
-                .filter(
-                        courtScheduleSlot ->
-                                bookings.stream()
-                                        .noneMatch(
-                                                booking ->
-                                                        booking.getCourt()
-                                                                        .equals(
-                                                                                courtScheduleSlot
-                                                                                        .getCourt())
-                                                                && booking.getTimeSlot()
-                                                                        .equals(
-                                                                                courtScheduleSlot
-                                                                                        .getTimeSlot())))
+                .filter(this::courtScheduleSlotIsNotAlreadyBooked)
                 .collect(toList());
+    }
+
+    private boolean courtScheduleSlotIsNotAlreadyBooked(CourtScheduleSlot courtScheduleSlot) {
+        return bookings.stream().noneMatch(booking -> booking.isForScheduleSlot(courtScheduleSlot));
     }
 
     public List<Booking> getAllBookingsForCourt(Court court) {
@@ -50,5 +42,10 @@ public class ReservationSystem {
         Court court;
         Player player;
         TimeSlot timeSlot;
+
+        public boolean isForScheduleSlot(CourtScheduleSlot courtScheduleSlot) {
+            return court.equals(courtScheduleSlot.getCourt())
+                    && timeSlot.equals(courtScheduleSlot.getTimeSlot());
+        }
     }
 }
