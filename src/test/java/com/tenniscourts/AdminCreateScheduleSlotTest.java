@@ -1,6 +1,5 @@
 package com.tenniscourts;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -84,13 +83,27 @@ class AdminCreateScheduleSlotTest {
     }
 
     @Test
-    @DisplayName("Creates court schedule slots for the same court for MONDAY and WEDNESDAY")
-    @Disabled("Refactoring")
+    @DisplayName(
+            "Adds a court schedule slot at a requested time slot for each of the days of week given as parameters")
     void test4() {
         final var courtScheduler = new CourtScheduler();
 
-        courtScheduler.createScheduleSlot(arthurAshe, CURRENT_TIME_SLOT, List.of(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY));
-        assertThat(courtScheduler.getCourtScheduleSlots()).hasSize(2);
+        courtScheduler.createScheduleSlot(
+                arthurAshe, CURRENT_TIME_SLOT, List.of(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY));
+
+        final var courtScheduleOpt = courtScheduler.getCourtSchedule(arthurAshe);
+        assertThat(courtScheduleOpt).isPresent();
+        final var courtSchedule = courtScheduleOpt.get();
+        assertThat(courtSchedule.getCourt()).isEqualTo(arthurAshe);
+
+        assertThat(courtSchedule.getScheduleSlotsForDay(DayOfWeek.MONDAY)).hasSize(1);
+        assertThat(courtSchedule.getScheduleSlotsForDay(DayOfWeek.WEDNESDAY)).hasSize(1);
+
+        assertThat(courtSchedule.getScheduleSlotsForDay(DayOfWeek.THURSDAY)).isEmpty();
+        assertThat(courtSchedule.getScheduleSlotsForDay(DayOfWeek.TUESDAY)).isEmpty();
+        assertThat(courtSchedule.getScheduleSlotsForDay(DayOfWeek.FRIDAY)).isEmpty();
+        assertThat(courtSchedule.getScheduleSlotsForDay(DayOfWeek.SATURDAY)).isEmpty();
+        assertThat(courtSchedule.getScheduleSlotsForDay(DayOfWeek.SUNDAY)).isEmpty();
     }
 
     private void assertSchedulerContainsInterestedCourtScheduleSlot(
