@@ -4,8 +4,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,10 +27,11 @@ class PlayerSingleBookingOfACourtTest {
                     + "given a reservation system with one available time slot for a court")
     void test() {
         final var timeslotForNow = TimeSlot.of(LocalTime.now());
-        courtScheduler.createScheduleSlot(arthurAshe, timeslotForNow);
+        courtScheduler.createScheduleSlot(arthurAshe, timeslotForNow, List.of(DayOfWeek.MONDAY));
         ReservationSystem reservationSystem = new ReservationSystem(courtScheduler);
 
-        reservationSystem.bookCourtForPlayerOnDateAtTime(arthurAshe, new Player(10L), LocalDate.now(), timeslotForNow);
+        reservationSystem.bookCourtForPlayerOnDateAtTime(
+                arthurAshe, new Player(10L), LocalDate.now(), timeslotForNow);
 
         assertThat(reservationSystem.getFreeScheduleSlots()).isEmpty();
         final var allBookingsForCourt = reservationSystem.getAllBookingsForCourt(arthurAshe);

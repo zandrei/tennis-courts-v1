@@ -10,39 +10,27 @@ import static java.util.stream.Collectors.toList;
 
 public class CourtScheduler {
 
-    private final HashMap<Court, List<CourtScheduleSlot>> courtScheduleSlots = new HashMap<>();
-    private final Set<CourtSchedule> schedules = new HashSet<>();
+    private final Map<Court, CourtSchedule> schedules = new HashMap<>();
 
     CourtScheduler() {}
 
-    public void createScheduleSlot(Court court, TimeSlot timeSlot) {
-        if (timeSlotIsInvalidForCourt(court, timeSlot)) {
-            throw new IllegalArgumentException(
-                    "Cannot add the same time slot multiple times for a single court!");
-        }
-        final var courtScheduleSlot = new CourtScheduleSlot(court, timeSlot);
-        courtScheduleSlots.putIfAbsent(court, new ArrayList<>());
-        courtScheduleSlots.get(court).add(courtScheduleSlot);
-    }
-
-    private boolean timeSlotIsInvalidForCourt(Court court, TimeSlot timeSlot) {
-        return courtScheduleSlots.containsKey(court)
-                && courtScheduleSlots.get(court).contains(new CourtScheduleSlot(court, timeSlot));
-    }
-
     public List<CourtScheduleSlot> getCourtScheduleSlots() {
-        return courtScheduleSlots.values().stream().flatMap(Collection::stream).collect(toList());
+        return schedules.values().stream()
+                .flatMap(courtSchedule -> courtSchedule.getAllSlots().stream())
+                .collect(toList());
     }
 
     public void createScheduleSlot(
             Court court, TimeSlot timeSlot, List<DayOfWeek> availableForDays) {
-        final var courtSchedule = new CourtSchedule(court);
+        final var courtSchedule = schedules.getOrDefault(court, new CourtSchedule(court));
         courtSchedule.addTimeSlotAt(timeSlot, availableForDays);
-        schedules.add(courtSchedule);
+        schedules.put(court, courtSchedule);
     }
 
     public Optional<CourtSchedule> getCourtSchedule(Court court) {
-        return schedules.stream().filter(schedule -> schedule.getCourt().equals(court)).findFirst();
+        return schedules.values().stream()
+                .filter(schedule -> schedule.getCourt().equals(court))
+                .findFirst();
     }
 
     public static class CourtSchedule {
@@ -54,11 +42,25 @@ public class CourtScheduler {
         }
 
         public void addTimeSlotAt(TimeSlot timeSlot, List<DayOfWeek> availableOnDays) {
+            if (timeSlotIsInvalidForGivenDays(timeSlot, availableOnDays)) {
+                throw new IllegalArgumentException(
+                        "Cannot add the same time slot multiple times for a single court!");
+            }
             availableOnDays.forEach(
                     dayAvailable -> {
                         dailySlots.putIfAbsent(dayAvailable, new ArrayList<>());
                         dailySlots.get(dayAvailable).add(new CourtScheduleSlot(court, timeSlot));
                     });
+        }
+
+        private boolean timeSlotIsInvalidForGivenDays(
+                TimeSlot timeSlot, List<DayOfWeek> availableOnDays) {
+            return availableOnDays.stream()
+                    .anyMatch(
+                            dayOfWeek ->
+                                    dailySlots
+                                            .getOrDefault(dayOfWeek, emptyList())
+                                            .contains(new CourtScheduleSlot(court, timeSlot)));
         }
 
         @Override
@@ -76,6 +78,10 @@ public class CourtScheduler {
 
         public List<CourtScheduleSlot> getScheduleSlotsForDay(DayOfWeek dayOfWeek) {
             return dailySlots.getOrDefault(dayOfWeek, emptyList());
+        }
+
+        public List<CourtScheduleSlot> getAllSlots() {
+            return dailySlots.values().stream().flatMap(Collection::stream).collect(toList());
         }
     }
 }

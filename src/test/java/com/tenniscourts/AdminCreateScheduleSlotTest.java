@@ -18,6 +18,7 @@ class AdminCreateScheduleSlotTest {
     private static final TimeSlot CURRENT_TIME_SLOT = TimeSlot.of(NOW);
     private static final TimeSlot ONE_HOUR_AGO_TIME_SLOT =
             TimeSlot.of(NOW.minus(1, ChronoUnit.HOURS));
+    public static final List<DayOfWeek> ONLY_MONDAY = List.of(DayOfWeek.MONDAY);
     private final Court arthurAshe = new Court(1L, "Arthur Ashe");
     private final Court rodLaver = new Court(2L, "Rod Laver");
 
@@ -27,7 +28,7 @@ class AdminCreateScheduleSlotTest {
     void test() {
         final var courtScheduler = new CourtScheduler();
 
-        courtScheduler.createScheduleSlot(arthurAshe, CURRENT_TIME_SLOT);
+        courtScheduler.createScheduleSlot(arthurAshe, CURRENT_TIME_SLOT, ONLY_MONDAY);
 
         assertThat(courtScheduler.getCourtScheduleSlots()).hasSize(1);
         final var courtScheduleSlot = courtScheduler.getCourtScheduleSlots().get(0);
@@ -40,9 +41,9 @@ class AdminCreateScheduleSlotTest {
             "Returns two court schedule slots for the same court, after adding two different time slots for the same court, given an initial empty schedule")
     void test1() {
         final var courtScheduler = new CourtScheduler();
-        courtScheduler.createScheduleSlot(arthurAshe, CURRENT_TIME_SLOT);
+        courtScheduler.createScheduleSlot(arthurAshe, CURRENT_TIME_SLOT, ONLY_MONDAY);
 
-        courtScheduler.createScheduleSlot(arthurAshe, ONE_HOUR_AGO_TIME_SLOT);
+        courtScheduler.createScheduleSlot(arthurAshe, ONE_HOUR_AGO_TIME_SLOT, ONLY_MONDAY);
 
         assertThat(courtScheduler.getCourtScheduleSlots()).hasSize(2);
 
@@ -60,9 +61,12 @@ class AdminCreateScheduleSlotTest {
             "Throws IllegalArgumentException given an initial empty schedule and trying to add the same time slot for the same court two times")
     void test2() {
         final var courtScheduler = new CourtScheduler();
-        courtScheduler.createScheduleSlot(arthurAshe, CURRENT_TIME_SLOT);
+        courtScheduler.createScheduleSlot(arthurAshe, CURRENT_TIME_SLOT, ONLY_MONDAY);
 
-        assertThatThrownBy(() -> courtScheduler.createScheduleSlot(arthurAshe, CURRENT_TIME_SLOT))
+        assertThatThrownBy(
+                        () ->
+                                courtScheduler.createScheduleSlot(
+                                        arthurAshe, CURRENT_TIME_SLOT, ONLY_MONDAY))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -71,8 +75,8 @@ class AdminCreateScheduleSlotTest {
             "Returns two court schedule slots for two different courts, after adding same time slots for two different courts, given an initial empty schedule")
     void test3() {
         final var courtScheduler = new CourtScheduler();
-        courtScheduler.createScheduleSlot(arthurAshe, CURRENT_TIME_SLOT);
-        courtScheduler.createScheduleSlot(rodLaver, CURRENT_TIME_SLOT);
+        courtScheduler.createScheduleSlot(arthurAshe, CURRENT_TIME_SLOT, ONLY_MONDAY);
+        courtScheduler.createScheduleSlot(rodLaver, CURRENT_TIME_SLOT, ONLY_MONDAY);
 
         assertThat(courtScheduler.getCourtScheduleSlots()).hasSize(2);
 
