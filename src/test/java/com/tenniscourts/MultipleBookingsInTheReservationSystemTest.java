@@ -40,7 +40,7 @@ class MultipleBookingsInTheReservationSystemTest {
         reservationSystem.bookCourtForPlayerOnDateAtTime(
                 ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
 
-        assertThat(reservationSystem.getFreeScheduleSlots()).isEmpty();
+        assertThat(reservationSystem.getFreeDailyScheduleSlots(MONDAY, MONDAY)).isEmpty();
         final var allBookingsForCourt = reservationSystem.getAllBookingsForCourt(ARTHUR_ASHE);
         assertThat(allBookingsForCourt).hasSize(1);
     }
@@ -69,13 +69,13 @@ class MultipleBookingsInTheReservationSystemTest {
         courtScheduler.createScheduleSlot(ARTHUR_ASHE, EXISTING_TIMESLOT, MONDAY_AND_WEDNESDAY);
         final var reservationSystem = new ReservationSystem(courtScheduler);
 
-        assertThat(reservationSystem.getFreeScheduleSlots()).hasSize(2);
+        assertThat(reservationSystem.getFreeDailyScheduleSlots(MONDAY, WEDNESDAY)).hasSize(2);
         reservationSystem.bookCourtForPlayerOnDateAtTime(
                 ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
         reservationSystem.bookCourtForPlayerOnDateAtTime(
                 ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY.plus(2, ChronoUnit.DAYS), EXISTING_TIMESLOT);
 
-        assertThat(reservationSystem.getFreeScheduleSlots()).isEmpty();
+        assertThat(reservationSystem.getFreeDailyScheduleSlots(MONDAY, WEDNESDAY)).isEmpty();
         final var allBookingsForCourt = reservationSystem.getAllBookingsForCourt(ARTHUR_ASHE);
         assertThat(allBookingsForCourt).hasSize(2);
     }
@@ -88,13 +88,13 @@ class MultipleBookingsInTheReservationSystemTest {
         courtScheduler.createScheduleSlot(NOT_ARTHUR_ASHE, EXISTING_TIMESLOT, ONLY_MONDAY);
         final var reservationSystem = new ReservationSystem(courtScheduler);
 
-        assertThat(reservationSystem.getFreeScheduleSlots()).hasSize(2);
+        assertThat(reservationSystem.getFreeDailyScheduleSlots(MONDAY, MONDAY)).hasSize(2);
         reservationSystem.bookCourtForPlayerOnDateAtTime(
                 ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
         reservationSystem.bookCourtForPlayerOnDateAtTime(
                 NOT_ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
 
-        assertThat(reservationSystem.getFreeScheduleSlots()).isEmpty();
+        assertThat(reservationSystem.getFreeDailyScheduleSlots(MONDAY, MONDAY)).isEmpty();
         final var allBookingsForArthurAshe = reservationSystem.getAllBookingsForCourt(ARTHUR_ASHE);
         assertThat(allBookingsForArthurAshe).hasSize(1);
 
@@ -110,7 +110,7 @@ class MultipleBookingsInTheReservationSystemTest {
         courtScheduler.createScheduleSlot(ARTHUR_ASHE, EXISTING_TIMESLOT, MONDAY_AND_WEDNESDAY);
         final var reservationSystem = new ReservationSystem(courtScheduler);
 
-        assertThat(reservationSystem.getFreeScheduleSlots()).hasSize(2);
+        assertThat(reservationSystem.getFreeDailyScheduleSlots(MONDAY, WEDNESDAY)).hasSize(2);
         reservationSystem.bookCourtForPlayerOnDateAtTime(
                 ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
 

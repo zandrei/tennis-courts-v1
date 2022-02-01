@@ -42,7 +42,7 @@ class PlayerSingleBookingOfACourtTest {
         reservationSystem.bookCourtForPlayerOnDateAtTime(
                 ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
 
-        assertThat(reservationSystem.getFreeScheduleSlots()).isEmpty();
+        assertThat(reservationSystem.getFreeDailyScheduleSlots(MONDAY, MONDAY)).isEmpty();
         final var allBookingsForCourt = reservationSystem.getAllBookingsForCourt(ARTHUR_ASHE);
         assertThat(allBookingsForCourt).hasSize(1);
 

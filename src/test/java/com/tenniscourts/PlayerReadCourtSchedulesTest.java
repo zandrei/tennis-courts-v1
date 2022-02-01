@@ -17,6 +17,7 @@ class PlayerReadCourtSchedulesTest {
     private static final TimeSlot TIME_SLOT_FOR_NOW = TimeSlot.of(LocalTime.now());
     private static final Court ARTHUR_ASHE = new Court(1L, "Arthur Ashe");
     private static final Court ROD_LAVER = new Court(2L, "Rod Laver");
+    private static final LocalDate TODAY = LocalDate.now();
     private CourtScheduler courtScheduler;
 
     @BeforeEach
@@ -29,7 +30,7 @@ class PlayerReadCourtSchedulesTest {
             "Returns empty schedule slots from the reservation system given a court scheduler with no slots created")
     void test() {
         final var reservationSystem = new ReservationSystem(courtScheduler);
-        assertThat(reservationSystem.getFreeScheduleSlots()).isEmpty();
+        assertThat(reservationSystem.getFreeDailyScheduleSlots(TODAY, TODAY)).isEmpty();
     }
 
     @Test
@@ -40,16 +41,19 @@ class PlayerReadCourtSchedulesTest {
                 ARTHUR_ASHE, TIME_SLOT_FOR_NOW, List.of(DayOfWeek.MONDAY));
         final var reservationSystem = new ReservationSystem(courtScheduler);
 
-        assertThat(reservationSystem.getFreeScheduleSlots()).hasSize(1);
-        assertThat(reservationSystem.getFreeScheduleSlots().get(0))
-                .isEqualTo(new CourtScheduleSlot(ARTHUR_ASHE, TIME_SLOT_FOR_NOW));
+        final var freeDailyScheduleSlots =
+                reservationSystem.getFreeDailyScheduleSlots(TODAY, TODAY.plusDays(7));
+        assertThat(freeDailyScheduleSlots).hasSize(1);
+        final var freeSlot = freeDailyScheduleSlots.get(0);
+        assertThat(freeSlot.getTimeSlot()).isEqualTo(TIME_SLOT_FOR_NOW);
+        assertThat(freeSlot.getCourt()).isEqualTo(ARTHUR_ASHE);
     }
 
     @Test
     @DisplayName(
             "Returns correct free daily schedule slots from the court scheduler for a 1 week requested time interval")
     void test2() {
-        final var today = LocalDate.now();
+        final var today = TODAY;
         courtScheduler.createScheduleSlot(
                 ARTHUR_ASHE, TIME_SLOT_FOR_NOW, List.of(DayOfWeek.MONDAY));
 
@@ -73,7 +77,7 @@ class PlayerReadCourtSchedulesTest {
     @DisplayName(
             "Returns correct free daily schedule slots from the court scheduler for a 1 week requested time interval given schedules for two courts")
     void test3() {
-        final var today = LocalDate.now();
+        final var today = TODAY;
         courtScheduler.createScheduleSlot(
                 ARTHUR_ASHE, TIME_SLOT_FOR_NOW, List.of(DayOfWeek.MONDAY));
 

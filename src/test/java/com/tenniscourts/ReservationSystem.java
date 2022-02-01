@@ -19,31 +19,16 @@ public class ReservationSystem {
         bookings = new ArrayList<>();
     }
 
-    public List<CourtScheduleSlot> getFreeScheduleSlots() {
-        final var courtScheduleSlots = courtScheduler.getCourtScheduleSlots();
-        return courtScheduleSlots.stream()
-                .filter(this::courtScheduleSlotIsNotAlreadyBooked)
-                .collect(toList());
-    }
-
     public List<DailyCourtScheduleSlot> getFreeDailyScheduleSlots(LocalDate start, LocalDate end) {
         final var dailyScheduleSlots = courtScheduler.getDailyScheduleSlots(start, end);
 
         return dailyScheduleSlots.stream()
-                .filter(
-                        this::dailyCourtScheduleSlotIsNotAlreadyBooked)
+                .filter(this::dailyCourtScheduleSlotIsNotAlreadyBooked)
                 .collect(toList());
     }
 
     private boolean dailyCourtScheduleSlotIsNotAlreadyBooked(DailyCourtScheduleSlot dailySlot) {
-        return bookings.stream()
-                .noneMatch(
-                        booking ->
-                                booking.isForDailyScheduleSlot(dailySlot));
-    }
-
-    private boolean courtScheduleSlotIsNotAlreadyBooked(CourtScheduleSlot courtScheduleSlot) {
-        return bookings.stream().noneMatch(booking -> booking.isForScheduleSlot(courtScheduleSlot));
+        return bookings.stream().noneMatch(booking -> booking.isForDailyScheduleSlot(dailySlot));
     }
 
     public List<Booking> getAllBookingsForCourt(Court court) {
