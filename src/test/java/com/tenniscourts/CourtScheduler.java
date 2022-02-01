@@ -92,7 +92,7 @@ public class CourtScheduler {
         }
 
         public boolean doesNotHaveScheduleSlot(LocalDate date, TimeSlot timeSlot) {
-            return !hasScheduleSlot(date,timeSlot);
+            return !hasScheduleSlot(date, timeSlot);
         }
     }
 }
