@@ -1,17 +1,23 @@
 package com.tenniscourts;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Objects;
 
-@Value
+@RequiredArgsConstructor
 @Getter
+@EqualsAndHashCode
 public class Booking {
-    Court court;
-    Player player;
-    LocalDate bookingDate;
-    TimeSlot timeSlot;
+    private final Court court;
+    private final Player player;
+    private final LocalDate bookingDate;
+    private final TimeSlot timeSlot;
+    private Payment payment;
 
     public boolean isForDailyScheduleSlot(DailyCourtScheduleSlot dailySlot) {
         return bookingDate.equals(dailySlot.getDay())
@@ -19,14 +25,21 @@ public class Booking {
                 && timeSlot.equals(dailySlot.getTimeSlot());
     }
 
-    public void makeDeposit(User paidBy, MakeADepositForABookingTest.Price depositAmount) {}
+    public void makeDeposit(User paidBy, MakeADepositForABookingTest.Price depositAmount) {
+        payment = new Payment(paidBy, depositAmount, Instant.now());
+    }
 
     public boolean isDepositPaid() {
-        return true;
+        return Objects.nonNull(payment);
     }
 
     @Value
     public static class User {
         Long id;
+    }
+
+    public static class Payment {
+        public Payment(
+                User paidBy, MakeADepositForABookingTest.Price amount, Instant transactionTime) {}
     }
 }
