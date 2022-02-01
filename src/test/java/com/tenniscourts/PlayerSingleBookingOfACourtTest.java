@@ -28,7 +28,7 @@ class PlayerSingleBookingOfACourtTest {
 
     @BeforeEach
     void setUp() {
-        courtScheduler = new CourtScheduler();
+        courtScheduler = new InMemoryCourtScheduler();
     }
 
     @Test

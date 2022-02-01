@@ -26,7 +26,7 @@ class AdminCreateScheduleSlotTest {
     @DisplayName(
             "Returns one court schedule slot after adding one schedule for a court, given an initial empty schedule")
     void test() {
-        final var courtScheduler = new CourtScheduler();
+        final var courtScheduler = new InMemoryCourtScheduler();
 
         courtScheduler.createScheduleSlot(arthurAshe, CURRENT_TIME_SLOT, ONLY_MONDAY);
 
@@ -40,7 +40,7 @@ class AdminCreateScheduleSlotTest {
     @DisplayName(
             "Returns two court schedule slots for the same court, after adding two different time slots for the same court, given an initial empty schedule")
     void test1() {
-        final var courtScheduler = new CourtScheduler();
+        final var courtScheduler = new InMemoryCourtScheduler();
         courtScheduler.createScheduleSlot(arthurAshe, CURRENT_TIME_SLOT, ONLY_MONDAY);
 
         courtScheduler.createScheduleSlot(arthurAshe, ONE_HOUR_AGO_TIME_SLOT, ONLY_MONDAY);
@@ -60,7 +60,7 @@ class AdminCreateScheduleSlotTest {
     @DisplayName(
             "Throws IllegalArgumentException given an initial empty schedule and trying to add the same time slot for the same court two times")
     void test2() {
-        final var courtScheduler = new CourtScheduler();
+        final var courtScheduler = new InMemoryCourtScheduler();
         courtScheduler.createScheduleSlot(arthurAshe, CURRENT_TIME_SLOT, ONLY_MONDAY);
 
         assertThatThrownBy(
@@ -74,7 +74,7 @@ class AdminCreateScheduleSlotTest {
     @DisplayName(
             "Returns two court schedule slots for two different courts, after adding same time slots for two different courts, given an initial empty schedule")
     void test3() {
-        final var courtScheduler = new CourtScheduler();
+        final var courtScheduler = new InMemoryCourtScheduler();
         courtScheduler.createScheduleSlot(arthurAshe, CURRENT_TIME_SLOT, ONLY_MONDAY);
         courtScheduler.createScheduleSlot(rodLaver, CURRENT_TIME_SLOT, ONLY_MONDAY);
 
@@ -90,7 +90,7 @@ class AdminCreateScheduleSlotTest {
     @DisplayName(
             "Adds a court schedule slot at a requested time slot for each of the days of week given as parameters")
     void test4() {
-        final var courtScheduler = new CourtScheduler();
+        final var courtScheduler = new InMemoryCourtScheduler();
 
         courtScheduler.createScheduleSlot(
                 arthurAshe, CURRENT_TIME_SLOT, List.of(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY));

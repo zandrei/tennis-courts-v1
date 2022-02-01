@@ -22,7 +22,7 @@ class PlayerReadCourtSchedulesTest {
 
     @BeforeEach
     void setUp() {
-        courtScheduler = new CourtScheduler();
+        courtScheduler = new InMemoryCourtScheduler();
     }
 
     @Test
