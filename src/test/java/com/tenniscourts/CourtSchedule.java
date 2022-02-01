@@ -5,6 +5,7 @@ import lombok.Getter;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
@@ -21,19 +22,25 @@ public class CourtSchedule {
             LocalDate startInclusive, LocalDate endInclusive) {
 
         return generateDaysBetween(startInclusive, endInclusive).stream()
-                .filter(day -> dailySlots.containsKey(day.getDayOfWeek()))
-                .flatMap(
-                        day ->
-                                dailySlots.get(day.getDayOfWeek()).stream()
-                                        .map(courtScheduleSlot -> courtScheduleSlot.atDay(day)))
+                .filter(this::daySlotIsDefinedForThisCourt)
+                .flatMap(this::generateAllDailySlotsForDay)
                 .collect(toList());
     }
 
-    private List<LocalDate> generateDaysBetween(LocalDate start, LocalDate end) {
+    private Stream<DailyCourtScheduleSlot> generateAllDailySlotsForDay(LocalDate day) {
+        return dailySlots.get(day.getDayOfWeek()).stream()
+                .map(courtScheduleSlot -> courtScheduleSlot.atDay(day));
+    }
+
+    private boolean daySlotIsDefinedForThisCourt(LocalDate day) {
+        return dailySlots.containsKey(day.getDayOfWeek());
+    }
+
+    private List<LocalDate> generateDaysBetween(LocalDate startInclusive, LocalDate endInclusive) {
         List<LocalDate> daysBetween = new ArrayList<>();
-        while (!start.isAfter(end)) {
-            daysBetween.add(start);
-            start = start.plusDays(1);
+        while (!startInclusive.isAfter(endInclusive)) {
+            daysBetween.add(startInclusive);
+            startInclusive = startInclusive.plusDays(1);
         }
         return daysBetween;
     }
