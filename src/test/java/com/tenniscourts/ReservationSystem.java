@@ -1,5 +1,6 @@
 package com.tenniscourts;
 
+import lombok.Getter;
 import lombok.Value;
 
 import java.time.LocalDate;
@@ -22,6 +23,28 @@ public class ReservationSystem {
         final var courtScheduleSlots = courtScheduler.getCourtScheduleSlots();
         return courtScheduleSlots.stream()
                 .filter(this::courtScheduleSlotIsNotAlreadyBooked)
+                .collect(toList());
+    }
+
+    public List<DailyCourtScheduleSlot> getFreeDailyScheduleSlots(LocalDate start, LocalDate end) {
+        final var dailyScheduleSlots = courtScheduler.getDailyScheduleSlots(start, end);
+
+        return dailyScheduleSlots.stream()
+                .filter(
+                        dailySlot ->
+                                bookings.stream()
+                                        .noneMatch(
+                                                booking ->
+                                                        booking.getBookingDate()
+                                                                        .equals(dailySlot.getDay())
+                                                                && booking.getCourt()
+                                                                        .equals(
+                                                                                dailySlot
+                                                                                        .getCourt())
+                                                                && booking.getTimeSlot()
+                                                                        .equals(
+                                                                                dailySlot
+                                                                                        .getTimeSlot())))
                 .collect(toList());
     }
 
@@ -53,6 +76,7 @@ public class ReservationSystem {
     }
 
     @Value
+    @Getter
     public static class Booking {
         Court court;
         Player player;
@@ -64,5 +88,4 @@ public class ReservationSystem {
                     && timeSlot.equals(courtScheduleSlot.getTimeSlot());
         }
     }
-
 }

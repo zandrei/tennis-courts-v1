@@ -48,9 +48,9 @@ public class CourtScheduler {
             this.court = court;
         }
 
-        public List<DailyCourtScheduleSlot> getDailyScheduleSlots(LocalDate start, LocalDate end) {
+        public List<DailyCourtScheduleSlot> getDailyScheduleSlots(LocalDate startInclusive, LocalDate endInclusive) {
 
-            return generateDaysBetween(start, end).stream()
+            return generateDaysBetween(startInclusive, endInclusive).stream()
                     .filter(day -> dailySlots.containsKey(day.getDayOfWeek()))
                     .flatMap(
                             day ->
@@ -67,7 +67,7 @@ public class CourtScheduler {
 
         private List<LocalDate> generateDaysBetween(LocalDate start, LocalDate end) {
             List<LocalDate> daysBetween = new ArrayList<>();
-            while (!start.isEqual(end)) {
+            while (!start.isAfter(end)) {
                 daysBetween.add(start);
                 start = start.plusDays(1);
             }

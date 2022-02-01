@@ -1,7 +1,6 @@
 package com.tenniscourts;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -18,6 +17,7 @@ class MultipleBookingsInTheReservationSystemTest {
 
     private static final Player IRRELEVANT_PLAYER = new Player(10L);
     private static final LocalDate MONDAY = LocalDate.of(2022, 1, 3);
+    private static final LocalDate WEDNESDAY = MONDAY.plusDays(2);
     private static final Court ARTHUR_ASHE = new Court(1L, "Arthur Ashe");
     private static final Court NOT_ARTHUR_ASHE = new Court(2L, "Not Arthur Ashe");
     private static final TimeSlot EXISTING_TIMESLOT = TimeSlot.of(LocalTime.now());
@@ -106,7 +106,6 @@ class MultipleBookingsInTheReservationSystemTest {
     @Test
     @DisplayName(
             "Shows correct free booking slots given a court scheduler with two available slots after a single court slot is booked")
-    @Disabled("Refactor")
     void test4() {
         courtScheduler.createScheduleSlot(ARTHUR_ASHE, EXISTING_TIMESLOT, MONDAY_AND_WEDNESDAY);
         final var reservationSystem = new ReservationSystem(courtScheduler);
@@ -115,11 +114,19 @@ class MultipleBookingsInTheReservationSystemTest {
         reservationSystem.bookCourtForPlayerOnDateAtTime(
                 ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
 
-        final var freeScheduleSlots = reservationSystem.getFreeScheduleSlots();
+        final var freeScheduleSlots =
+                reservationSystem.getFreeDailyScheduleSlots(MONDAY, WEDNESDAY);
         assertThat(freeScheduleSlots).hasSize(1);
         assertThat(freeScheduleSlots.get(0).getCourt()).isEqualTo(ARTHUR_ASHE);
         assertThat(freeScheduleSlots.get(0).getTimeSlot()).isEqualTo(EXISTING_TIMESLOT);
+        assertThat(freeScheduleSlots.get(0).getDay()).isEqualTo(WEDNESDAY);
+
         final var allBookingsForCourt = reservationSystem.getAllBookingsForCourt(ARTHUR_ASHE);
         assertThat(allBookingsForCourt).hasSize(1);
+        final var booking = allBookingsForCourt.get(0);
+        assertThat(booking.getPlayer()).isEqualTo(IRRELEVANT_PLAYER);
+        assertThat(booking.getBookingDate()).isEqualTo(MONDAY);
+        assertThat(booking.getTimeSlot()).isEqualTo(EXISTING_TIMESLOT);
+        assertThat(booking.getCourt()).isEqualTo(ARTHUR_ASHE);
     }
 }
