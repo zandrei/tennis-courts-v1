@@ -25,12 +25,7 @@ public class CourtSchedule {
                 .flatMap(
                         day ->
                                 dailySlots.get(day.getDayOfWeek()).stream()
-                                        .map(
-                                                courtScheduleSlot ->
-                                                        new DailyCourtScheduleSlot(
-                                                                court,
-                                                                day,
-                                                                courtScheduleSlot.getTimeSlot())))
+                                        .map(courtScheduleSlot -> courtScheduleSlot.atDay(day)))
                 .collect(toList());
     }
 
