@@ -30,7 +30,9 @@ public class ReservationSystem {
     }
 
     public List<Booking> getAllBookingsForCourt(Court court) {
-        return bookings;
+        return bookings.stream()
+                .filter(booking -> booking.getCourt().equals(court))
+                .collect(toList());
     }
 
     public void bookCourtForPlayerOnDateAtTime(

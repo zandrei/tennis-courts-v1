@@ -78,4 +78,27 @@ class MultipleBookingsInTheReservationSystemTest {
         final var allBookingsForCourt = reservationSystem.getAllBookingsForCourt(ARTHUR_ASHE);
         assertThat(allBookingsForCourt).hasSize(2);
     }
+
+    @Test
+    @DisplayName(
+            "Creates two bookings for two courts given a court scheduler with two schedule slots for two different courts")
+    void test3() {
+        courtScheduler.createScheduleSlot(ARTHUR_ASHE, EXISTING_TIMESLOT, ONLY_MONDAY);
+        courtScheduler.createScheduleSlot(NOT_ARTHUR_ASHE, EXISTING_TIMESLOT, ONLY_MONDAY);
+        final var reservationSystem = new ReservationSystem(courtScheduler);
+
+        assertThat(reservationSystem.getFreeScheduleSlots()).hasSize(2);
+        reservationSystem.bookCourtForPlayerOnDateAtTime(
+                ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
+        reservationSystem.bookCourtForPlayerOnDateAtTime(
+                NOT_ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
+
+        assertThat(reservationSystem.getFreeScheduleSlots()).isEmpty();
+        final var allBookingsForArthurAshe = reservationSystem.getAllBookingsForCourt(ARTHUR_ASHE);
+        assertThat(allBookingsForArthurAshe).hasSize(1);
+
+        final var allBookingsForOtherCourt =
+                reservationSystem.getAllBookingsForCourt(NOT_ARTHUR_ASHE);
+        assertThat(allBookingsForOtherCourt).hasSize(1);
+    }
 }
