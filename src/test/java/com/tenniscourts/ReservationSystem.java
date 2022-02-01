@@ -55,18 +55,6 @@ public class ReservationSystem {
         return booking;
     }
 
-    public boolean isDepositPayed(Booking booking) {
-        return false;
-    }
-
-    public MakeADepositForABookingTest.Price getDeposit(Booking booking) {
-        return null;
-    }
-
-    public void makeDeposit(Player player, Booking booking, MakeADepositForABookingTest.Price depositValue) {
-
-    }
-
     @Value
     @Getter
     public static class Booking {
@@ -75,20 +63,13 @@ public class ReservationSystem {
         LocalDate bookingDate;
         TimeSlot timeSlot;
 
-        public boolean isForScheduleSlot(CourtScheduleSlot courtScheduleSlot) {
-            return court.equals(courtScheduleSlot.getCourt())
-                    && timeSlot.equals(courtScheduleSlot.getTimeSlot());
-        }
-
         public boolean isForDailyScheduleSlot(DailyCourtScheduleSlot dailySlot) {
             return bookingDate.equals(dailySlot.getDay())
                     && court.equals(dailySlot.getCourt())
                     && timeSlot.equals(dailySlot.getTimeSlot());
         }
 
-        public void makeDeposit(Player paidBy, MakeADepositForABookingTest.Price depositAmount) {
-
-        }
+        public void makeDeposit(Player paidBy, MakeADepositForABookingTest.Price depositAmount) {}
 
         public boolean isDepositPaid() {
             return true;
