@@ -22,7 +22,7 @@ class MakeADepositForABookingTest {
     void test() {
         final var irrelevantPrice = Price.cents(new BigDecimal(983));
         final var booking =
-                new ReservationSystem.Booking(
+                new Booking(
                         ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
 
         booking.makeDeposit(IRRELEVANT_PLAYER, irrelevantPrice);
@@ -35,7 +35,7 @@ class MakeADepositForABookingTest {
     @Disabled
     void test1() {
         final var booking =
-                new ReservationSystem.Booking(
+                new Booking(
                         ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
 
         assertThat(booking.isDepositPaid()).isFalse();
