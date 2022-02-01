@@ -10,12 +10,14 @@ import java.time.LocalTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MultipleBookingsInTheReservationSystemTest {
 
     private static final Player IRRELEVANT_PLAYER = new Player(10L);
     private static final LocalDate MONDAY = LocalDate.of(2022, 1, 3);
     private static final Court ARTHUR_ASHE = new Court(1L, "Arthur Ashe");
+    private static final Court NOT_ARTHUR_ASHE = new Court(2L, "Not Arthur Ashe");
     private static final TimeSlot EXISTING_TIMESLOT = TimeSlot.of(LocalTime.now());
     private final List<DayOfWeek> ONLY_MONDAY = List.of(DayOfWeek.MONDAY);
     private CourtScheduler courtScheduler;
@@ -38,5 +40,23 @@ class MultipleBookingsInTheReservationSystemTest {
         assertThat(reservationSystem.getFreeScheduleSlots()).isEmpty();
         final var allBookingsForCourt = reservationSystem.getAllBookingsForCourt(ARTHUR_ASHE);
         assertThat(allBookingsForCourt).hasSize(1);
+    }
+
+    @Test
+    @DisplayName(
+            "Throws an IllegalArgumentException trying to book a court which does not have a schedule slot")
+    void test1() {
+
+        courtScheduler.createScheduleSlot(ARTHUR_ASHE, EXISTING_TIMESLOT, ONLY_MONDAY);
+        final var reservationSystem = new ReservationSystem(courtScheduler);
+
+        assertThatThrownBy(
+                        () ->
+                                reservationSystem.bookCourtForPlayerOnDateAtTime(
+                                        NOT_ARTHUR_ASHE,
+                                        IRRELEVANT_PLAYER,
+                                        MONDAY,
+                                        EXISTING_TIMESLOT))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }
