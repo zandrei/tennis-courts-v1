@@ -21,7 +21,7 @@ class PlayerSingleBookingOfACourtTest {
     private static final Court ARTHUR_ASHE = new Court(1L, "Arthur Ashe");
     private static final Court NOT_ARTHUR_ASHE = new Court(2L, "Rod Laver");
     private static final TimeSlot EXISTING_TIMESLOT = TimeSlot.of(LocalTime.now());
-    private static final TimeSlot NON_EXISTANT_TIMESLOT =
+    private static final TimeSlot NON_EXISTENT_TIMESLOT =
             TimeSlot.of(LocalTime.now().minus(1, ChronoUnit.HOURS));
     private final List<DayOfWeek> ONLY_MONDAY = List.of(DayOfWeek.MONDAY);
     private CourtScheduler courtScheduler;
@@ -75,7 +75,7 @@ class PlayerSingleBookingOfACourtTest {
                                         ARTHUR_ASHE,
                                         IRRELEVANT_PLAYER,
                                         MONDAY,
-                                        NON_EXISTANT_TIMESLOT))
+                                        NON_EXISTENT_TIMESLOT))
                 .isInstanceOf(IllegalArgumentException.class);
 
         assertThatThrownBy(
