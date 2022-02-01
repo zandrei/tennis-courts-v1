@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -52,8 +51,7 @@ class PlayerReadCourtSchedulesTest {
         courtScheduler.createScheduleSlot(
                 ARTHUR_ASHE, TIME_SLOT_FOR_NOW, List.of(DayOfWeek.MONDAY));
 
-        var dailyScheduleSlots =
-                courtScheduler.getDailyScheduleSlots(today.minus(7, ChronoUnit.DAYS), today);
+        var dailyScheduleSlots = courtScheduler.getDailyScheduleSlots(today.minusDays(7), today);
 
         assertThat(dailyScheduleSlots).hasSize(1);
         assertThat(dailyScheduleSlots.get(0).getDay().getDayOfWeek()).isEqualTo(DayOfWeek.MONDAY);
@@ -61,17 +59,11 @@ class PlayerReadCourtSchedulesTest {
         courtScheduler.createScheduleSlot(
                 ARTHUR_ASHE, TIME_SLOT_FOR_NOW, List.of(DayOfWeek.WEDNESDAY));
 
-        dailyScheduleSlots =
-                courtScheduler.getDailyScheduleSlots(today.minus(7, ChronoUnit.DAYS), today);
+        dailyScheduleSlots = courtScheduler.getDailyScheduleSlots(today.minusDays(7), today);
 
         assertThat(dailyScheduleSlots)
                 .hasSize(2)
-                .anyMatch(
-                        dailySchedule ->
-                                dailySchedule.isInDayOfWeek(DayOfWeek.MONDAY))
-                .anyMatch(
-                        dailySchedule ->
-                                dailySchedule.isInDayOfWeek(DayOfWeek.WEDNESDAY));
+                .anyMatch(dailySchedule -> dailySchedule.isInDayOfWeek(DayOfWeek.MONDAY))
+                .anyMatch(dailySchedule -> dailySchedule.isInDayOfWeek(DayOfWeek.WEDNESDAY));
     }
-
 }
