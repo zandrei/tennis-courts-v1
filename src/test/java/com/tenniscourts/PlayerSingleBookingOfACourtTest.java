@@ -18,10 +18,10 @@ class PlayerSingleBookingOfACourtTest {
     private static final Player IRRELEVANT_PLAYER = new Player(10L);
     private static final LocalDate NOT_MONDAY = LocalDate.of(2022, 1, 1);
     private static final LocalDate MONDAY = LocalDate.of(2022, 1, 3);
-    private final Court arthurAshe = new Court(1L, "Arthur Ashe");
-    private final Court rodLaver = new Court(2L, "Rod Laver");
-    private static final TimeSlot TIMESLOT_FOR_NOW = TimeSlot.of(LocalTime.now());
-    private static final TimeSlot TIMESLOT_FOR_ONE_HOUR_AGO =
+    private static final Court ARTHUR_ASHE = new Court(1L, "Arthur Ashe");
+    private static final Court NOT_ARTHUR_ASHE = new Court(2L, "Rod Laver");
+    private static final TimeSlot EXISTING_TIMESLOT = TimeSlot.of(LocalTime.now());
+    private static final TimeSlot NON_EXISTANT_TIMESLOT =
             TimeSlot.of(LocalTime.now().minus(1, ChronoUnit.HOURS));
     private final List<DayOfWeek> ONLY_MONDAY = List.of(DayOfWeek.MONDAY);
     private CourtScheduler courtScheduler;
@@ -36,20 +36,20 @@ class PlayerSingleBookingOfACourtTest {
             "Can create a booking for a court at a specific timeslot by a single player,"
                     + "given a reservation system with one available time slot for a court")
     void test() {
-        courtScheduler.createScheduleSlot(arthurAshe, TIMESLOT_FOR_NOW, ONLY_MONDAY);
+        courtScheduler.createScheduleSlot(ARTHUR_ASHE, EXISTING_TIMESLOT, ONLY_MONDAY);
         final var reservationSystem = new ReservationSystem(courtScheduler);
 
         reservationSystem.bookCourtForPlayerOnDateAtTime(
-                arthurAshe, IRRELEVANT_PLAYER, MONDAY, TIMESLOT_FOR_NOW);
+                ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
 
         assertThat(reservationSystem.getFreeScheduleSlots()).isEmpty();
-        final var allBookingsForCourt = reservationSystem.getAllBookingsForCourt(arthurAshe);
+        final var allBookingsForCourt = reservationSystem.getAllBookingsForCourt(ARTHUR_ASHE);
         assertThat(allBookingsForCourt).hasSize(1);
 
         final var booking = allBookingsForCourt.get(0);
-        assertThat(booking.getCourt()).isEqualTo(arthurAshe);
+        assertThat(booking.getCourt()).isEqualTo(ARTHUR_ASHE);
         assertThat(booking.getPlayer()).isEqualTo(IRRELEVANT_PLAYER);
-        assertThat(booking.getTimeSlot()).isEqualTo(TIMESLOT_FOR_NOW);
+        assertThat(booking.getTimeSlot()).isEqualTo(EXISTING_TIMESLOT);
     }
 
     @Test
@@ -57,31 +57,34 @@ class PlayerSingleBookingOfACourtTest {
             "Throws IllegalArgumentException when trying to create a booking for a specific timeslot "
                     + "given a reservation system with no available timeslot at the requested time")
     void test1() {
-        courtScheduler.createScheduleSlot(arthurAshe, TIMESLOT_FOR_NOW, ONLY_MONDAY);
+        courtScheduler.createScheduleSlot(ARTHUR_ASHE, EXISTING_TIMESLOT, ONLY_MONDAY);
         final var reservationSystem = new ReservationSystem(courtScheduler);
 
         assertThatThrownBy(
                         () ->
                                 reservationSystem.bookCourtForPlayerOnDateAtTime(
-                                        arthurAshe,
+                                        ARTHUR_ASHE,
                                         IRRELEVANT_PLAYER,
                                         NOT_MONDAY,
-                                        TIMESLOT_FOR_NOW))
+                                        EXISTING_TIMESLOT))
                 .isInstanceOf(IllegalArgumentException.class);
 
         assertThatThrownBy(
                         () ->
                                 reservationSystem.bookCourtForPlayerOnDateAtTime(
-                                        arthurAshe,
+                                        ARTHUR_ASHE,
                                         IRRELEVANT_PLAYER,
                                         MONDAY,
-                                        TIMESLOT_FOR_ONE_HOUR_AGO))
+                                        NON_EXISTANT_TIMESLOT))
                 .isInstanceOf(IllegalArgumentException.class);
 
         assertThatThrownBy(
                         () ->
                                 reservationSystem.bookCourtForPlayerOnDateAtTime(
-                                        rodLaver, IRRELEVANT_PLAYER, MONDAY, TIMESLOT_FOR_NOW))
+                                        NOT_ARTHUR_ASHE,
+                                        IRRELEVANT_PLAYER,
+                                        MONDAY,
+                                        EXISTING_TIMESLOT))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }
