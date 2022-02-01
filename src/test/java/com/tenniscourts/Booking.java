@@ -19,9 +19,14 @@ public class Booking {
                 && timeSlot.equals(dailySlot.getTimeSlot());
     }
 
-    public void makeDeposit(Player paidBy, MakeADepositForABookingTest.Price depositAmount) {}
+    public void makeDeposit(User paidBy, MakeADepositForABookingTest.Price depositAmount) {}
 
     public boolean isDepositPaid() {
         return true;
+    }
+
+    @Value
+    public static class User {
+        Long id;
     }
 }
