@@ -34,9 +34,14 @@ public class CourtScheduler {
                 .findFirst();
     }
 
-    public List<DailyCourtScheduleSlot> getDailyScheduleSlots(LocalDate start, LocalDate end) {
+    public List<DailyCourtScheduleSlot> getDailyScheduleSlots(
+            LocalDate startInclusive, LocalDate endInclusive) {
         return schedules.values().stream()
-                .flatMap(courtSchedule -> courtSchedule.getDailyScheduleSlots(start, end).stream())
+                .flatMap(
+                        courtSchedule ->
+                                courtSchedule
+                                        .getDailyScheduleSlots(startInclusive, endInclusive)
+                                        .stream())
                 .collect(toList());
     }
 
@@ -48,7 +53,8 @@ public class CourtScheduler {
             this.court = court;
         }
 
-        public List<DailyCourtScheduleSlot> getDailyScheduleSlots(LocalDate startInclusive, LocalDate endInclusive) {
+        public List<DailyCourtScheduleSlot> getDailyScheduleSlots(
+                LocalDate startInclusive, LocalDate endInclusive) {
 
             return generateDaysBetween(startInclusive, endInclusive).stream()
                     .filter(day -> dailySlots.containsKey(day.getDayOfWeek()))
