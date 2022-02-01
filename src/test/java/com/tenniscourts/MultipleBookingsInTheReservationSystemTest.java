@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,6 +21,8 @@ class MultipleBookingsInTheReservationSystemTest {
     private static final Court NOT_ARTHUR_ASHE = new Court(2L, "Not Arthur Ashe");
     private static final TimeSlot EXISTING_TIMESLOT = TimeSlot.of(LocalTime.now());
     private final List<DayOfWeek> ONLY_MONDAY = List.of(DayOfWeek.MONDAY);
+    private final List<DayOfWeek> MONDAY_AND_WEDNESDAY =
+            List.of(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY);
     private CourtScheduler courtScheduler;
 
     @BeforeEach
@@ -30,7 +33,6 @@ class MultipleBookingsInTheReservationSystemTest {
     @Test
     @DisplayName("Creates a booking for a court given a court scheduler with one schedule slot")
     void test() {
-
         courtScheduler.createScheduleSlot(ARTHUR_ASHE, EXISTING_TIMESLOT, ONLY_MONDAY);
         final var reservationSystem = new ReservationSystem(courtScheduler);
 
@@ -58,5 +60,22 @@ class MultipleBookingsInTheReservationSystemTest {
                                         MONDAY,
                                         EXISTING_TIMESLOT))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("Creates two bookings for a court given a court scheduler with two schedule slot")
+    void test2() {
+        courtScheduler.createScheduleSlot(ARTHUR_ASHE, EXISTING_TIMESLOT, MONDAY_AND_WEDNESDAY);
+        final var reservationSystem = new ReservationSystem(courtScheduler);
+
+        assertThat(reservationSystem.getFreeScheduleSlots()).hasSize(2);
+        reservationSystem.bookCourtForPlayerOnDateAtTime(
+                ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
+        reservationSystem.bookCourtForPlayerOnDateAtTime(
+                ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY.plus(2, ChronoUnit.DAYS), EXISTING_TIMESLOT);
+
+        assertThat(reservationSystem.getFreeScheduleSlots()).isEmpty();
+        final var allBookingsForCourt = reservationSystem.getAllBookingsForCourt(ARTHUR_ASHE);
+        assertThat(allBookingsForCourt).hasSize(2);
     }
 }
