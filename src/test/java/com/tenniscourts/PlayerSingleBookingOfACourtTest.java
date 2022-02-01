@@ -39,7 +39,7 @@ class PlayerSingleBookingOfACourtTest {
         final var reservationSystem = new ReservationSystem(courtScheduler);
 
         reservationSystem.bookCourtForPlayerOnDateAtTime(
-                arthurAshe, IRRELEVANT_PLAYER, LocalDate.now(), TIMESLOT_FOR_NOW);
+                arthurAshe, IRRELEVANT_PLAYER, MONDAY, TIMESLOT_FOR_NOW);
 
         assertThat(reservationSystem.getFreeScheduleSlots()).isEmpty();
         final var allBookingsForCourt = reservationSystem.getAllBookingsForCourt(arthurAshe);
