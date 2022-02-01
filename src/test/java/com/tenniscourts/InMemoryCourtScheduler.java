@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
@@ -33,7 +35,7 @@ public class InMemoryCourtScheduler implements CourtScheduler {
     @Override
     public Optional<CourtSchedule> getCourtSchedule(Court court) {
         return schedules.values().stream()
-                .filter(schedule -> schedule.getCourt().equals(court))
+                .filter(schedule -> schedule.isForCourt(court))
                 .findFirst();
     }
 
@@ -41,11 +43,13 @@ public class InMemoryCourtScheduler implements CourtScheduler {
     public List<DailyCourtScheduleSlot> getDailyScheduleSlots(
             LocalDate startInclusive, LocalDate endInclusive) {
         return schedules.values().stream()
-                .flatMap(
-                        courtSchedule ->
-                                courtSchedule
-                                        .getDailyScheduleSlots(startInclusive, endInclusive)
-                                        .stream())
+                .flatMap(getIndividualCourtDailyScheduleSlots(startInclusive, endInclusive))
                 .collect(toList());
+    }
+
+    private Function<CourtSchedule, Stream<? extends DailyCourtScheduleSlot>>
+            getIndividualCourtDailyScheduleSlots(LocalDate startInclusive, LocalDate endInclusive) {
+        return courtSchedule ->
+                courtSchedule.getDailyScheduleSlots(startInclusive, endInclusive).stream();
     }
 }

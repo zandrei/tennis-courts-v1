@@ -94,4 +94,8 @@ public class CourtSchedule {
     public boolean doesNotHaveScheduleSlot(LocalDate date, TimeSlot timeSlot) {
         return !hasScheduleSlot(date, timeSlot);
     }
+
+    boolean isForCourt(Court court) {
+        return this.court.equals(court);
+    }
 }
