@@ -34,12 +34,44 @@ public class CourtScheduler {
                 .findFirst();
     }
 
+    public List<DailyCourtScheduleSlot> getDailyScheduleSlots(LocalDate start, LocalDate end) {
+        return schedules.values().stream()
+                .flatMap(courtSchedule -> courtSchedule.getDailyScheduleSlots(start, end).stream())
+                .collect(toList());
+    }
+
     public static class CourtSchedule {
         @Getter private final Court court;
         private final Map<DayOfWeek, List<CourtScheduleSlot>> dailySlots = new HashMap<>();
 
         public CourtSchedule(Court court) {
             this.court = court;
+        }
+
+        public List<DailyCourtScheduleSlot> getDailyScheduleSlots(LocalDate start, LocalDate end) {
+
+            return generateDaysBetween(start, end).stream()
+                    .filter(day -> dailySlots.containsKey(day.getDayOfWeek()))
+                    .flatMap(
+                            day ->
+                                    dailySlots.get(day.getDayOfWeek()).stream()
+                                            .map(
+                                                    courtScheduleSlot ->
+                                                            new DailyCourtScheduleSlot(
+                                                                    court,
+                                                                    day,
+                                                                    courtScheduleSlot
+                                                                            .getTimeSlot())))
+                    .collect(toList());
+        }
+
+        private List<LocalDate> generateDaysBetween(LocalDate start, LocalDate end) {
+            List<LocalDate> daysBetween = new ArrayList<>();
+            while (!start.isEqual(end)) {
+                daysBetween.add(start);
+                start = start.plusDays(1);
+            }
+            return daysBetween;
         }
 
         public void addTimeSlotAt(TimeSlot timeSlot, List<DayOfWeek> availableOnDays) {

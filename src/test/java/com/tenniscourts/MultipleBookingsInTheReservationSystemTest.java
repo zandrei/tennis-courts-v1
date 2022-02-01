@@ -1,6 +1,7 @@
 package com.tenniscourts;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -100,5 +101,25 @@ class MultipleBookingsInTheReservationSystemTest {
         final var allBookingsForOtherCourt =
                 reservationSystem.getAllBookingsForCourt(NOT_ARTHUR_ASHE);
         assertThat(allBookingsForOtherCourt).hasSize(1);
+    }
+
+    @Test
+    @DisplayName(
+            "Shows correct free booking slots given a court scheduler with two available slots after a single court slot is booked")
+    @Disabled("Refactor")
+    void test4() {
+        courtScheduler.createScheduleSlot(ARTHUR_ASHE, EXISTING_TIMESLOT, MONDAY_AND_WEDNESDAY);
+        final var reservationSystem = new ReservationSystem(courtScheduler);
+
+        assertThat(reservationSystem.getFreeScheduleSlots()).hasSize(2);
+        reservationSystem.bookCourtForPlayerOnDateAtTime(
+                ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
+
+        final var freeScheduleSlots = reservationSystem.getFreeScheduleSlots();
+        assertThat(freeScheduleSlots).hasSize(1);
+        assertThat(freeScheduleSlots.get(0).getCourt()).isEqualTo(ARTHUR_ASHE);
+        assertThat(freeScheduleSlots.get(0).getTimeSlot()).isEqualTo(EXISTING_TIMESLOT);
+        final var allBookingsForCourt = reservationSystem.getAllBookingsForCourt(ARTHUR_ASHE);
+        assertThat(allBookingsForCourt).hasSize(1);
     }
 }
