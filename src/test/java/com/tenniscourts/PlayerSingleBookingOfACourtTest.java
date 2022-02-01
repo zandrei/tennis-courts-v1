@@ -19,6 +19,7 @@ class PlayerSingleBookingOfACourtTest {
     private static final LocalDate NOT_MONDAY = LocalDate.of(2022, 1, 1);
     private static final LocalDate MONDAY = LocalDate.of(2022, 1, 3);
     private final Court arthurAshe = new Court(1L, "Arthur Ashe");
+    private final Court rodLaver = new Court(2L, "Rod Laver");
     private static final TimeSlot TIMESLOT_FOR_NOW = TimeSlot.of(LocalTime.now());
     private static final TimeSlot TIMESLOT_FOR_ONE_HOUR_AGO =
             TimeSlot.of(LocalTime.now().minus(1, ChronoUnit.HOURS));
@@ -75,6 +76,12 @@ class PlayerSingleBookingOfACourtTest {
                                         IRRELEVANT_PLAYER,
                                         MONDAY,
                                         TIMESLOT_FOR_ONE_HOUR_AGO))
+                .isInstanceOf(IllegalArgumentException.class);
+
+        assertThatThrownBy(
+                        () ->
+                                reservationSystem.bookCourtForPlayerOnDateAtTime(
+                                        rodLaver, IRRELEVANT_PLAYER, MONDAY, TIMESLOT_FOR_NOW))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

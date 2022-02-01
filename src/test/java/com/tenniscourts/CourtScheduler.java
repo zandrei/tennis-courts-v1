@@ -90,5 +90,9 @@ public class CourtScheduler {
                     .anyMatch(
                             courtScheduleSlot -> courtScheduleSlot.getTimeSlot().equals(timeSlot));
         }
+
+        public boolean doesNotHaveScheduleSlot(LocalDate date, TimeSlot timeSlot) {
+            return !hasScheduleSlot(date,timeSlot);
+        }
     }
 }
