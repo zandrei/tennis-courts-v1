@@ -37,7 +37,7 @@ public class ReservationSystem {
                 .collect(toList());
     }
 
-    public void bookCourtForPlayerOnDateAtTime(
+    public Booking bookCourtForPlayerOnDateAtTime(
             Court court, Player player, LocalDate bookingDate, TimeSlot timeSlot) {
         final var courtSchedule =
                 courtScheduler
@@ -52,6 +52,19 @@ public class ReservationSystem {
         }
         final var booking = new Booking(court, player, bookingDate, timeSlot);
         bookings.add(booking);
+        return booking;
+    }
+
+    public boolean isDepositPayed(Booking booking) {
+        return false;
+    }
+
+    public MakeADepositForABookingTest.Price getDeposit(Booking booking) {
+        return null;
+    }
+
+    public void makeDeposit(Player player, Booking booking, MakeADepositForABookingTest.Price depositValue) {
+
     }
 
     @Value
@@ -71,6 +84,14 @@ public class ReservationSystem {
             return bookingDate.equals(dailySlot.getDay())
                     && court.equals(dailySlot.getCourt())
                     && timeSlot.equals(dailySlot.getTimeSlot());
+        }
+
+        public void makeDeposit(Player paidBy, MakeADepositForABookingTest.Price depositAmount) {
+
+        }
+
+        public boolean isDepositPaid() {
+            return true;
         }
     }
 }
