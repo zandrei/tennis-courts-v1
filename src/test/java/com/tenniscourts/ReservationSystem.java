@@ -31,21 +31,15 @@ public class ReservationSystem {
 
         return dailyScheduleSlots.stream()
                 .filter(
-                        dailySlot ->
-                                bookings.stream()
-                                        .noneMatch(
-                                                booking ->
-                                                        booking.getBookingDate()
-                                                                        .equals(dailySlot.getDay())
-                                                                && booking.getCourt()
-                                                                        .equals(
-                                                                                dailySlot
-                                                                                        .getCourt())
-                                                                && booking.getTimeSlot()
-                                                                        .equals(
-                                                                                dailySlot
-                                                                                        .getTimeSlot())))
+                        this::dailyCourtScheduleSlotIsNotAlreadyBooked)
                 .collect(toList());
+    }
+
+    private boolean dailyCourtScheduleSlotIsNotAlreadyBooked(DailyCourtScheduleSlot dailySlot) {
+        return bookings.stream()
+                .noneMatch(
+                        booking ->
+                                booking.isForDailyScheduleSlot(dailySlot));
     }
 
     private boolean courtScheduleSlotIsNotAlreadyBooked(CourtScheduleSlot courtScheduleSlot) {
@@ -86,6 +80,12 @@ public class ReservationSystem {
         public boolean isForScheduleSlot(CourtScheduleSlot courtScheduleSlot) {
             return court.equals(courtScheduleSlot.getCourt())
                     && timeSlot.equals(courtScheduleSlot.getTimeSlot());
+        }
+
+        public boolean isForDailyScheduleSlot(DailyCourtScheduleSlot dailySlot) {
+            return bookingDate.equals(dailySlot.getDay())
+                    && court.equals(dailySlot.getCourt())
+                    && timeSlot.equals(dailySlot.getTimeSlot());
         }
     }
 }
