@@ -30,4 +30,8 @@ public class Price {
     public Price minusCents(BigDecimal subtractAmount) {
         return Price.cents(cents.subtract(subtractAmount));
     }
+
+    public Price plusCents(BigDecimal addAmount) {
+        return Price.cents(cents.add(addAmount));
+    }
 }

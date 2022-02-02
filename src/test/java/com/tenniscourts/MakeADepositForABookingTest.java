@@ -69,5 +69,12 @@ class MakeADepositForABookingTest {
                                         IRRELEVANT_USER,
                                         requestedDeposit.minusCents(new BigDecimal(200))))
                 .isInstanceOf(Booking.DepositAmountDifferentThanRequestedException.class);
+
+        assertThatThrownBy(
+                        () ->
+                                booking.makeDeposit(
+                                        IRRELEVANT_USER,
+                                        requestedDeposit.plusCents(new BigDecimal(125))))
+                .isInstanceOf(Booking.DepositAmountDifferentThanRequestedException.class);
     }
 }
