@@ -67,7 +67,7 @@ public class Booking {
     }
 
     public boolean isPaid() {
-        return false;
+        return paymentRequest.isPaid();
     }
 
     public void makePayment(User paidBy, Price paymentAmount) {
@@ -76,6 +76,7 @@ public class Booking {
             throw new PaidAmountDifferentThanRequestedException(
                     "The requested payment amount is not equal to the amount paid by the user");
         }
+        paymentRequest.makePayment(new Payment(paidBy, paymentAmount, Instant.now()));
     }
 
     @Value
@@ -109,5 +110,13 @@ public class Booking {
     public static class PaymentRequest {
         final Price requestedAmount;
         private Payment payment;
+
+        public boolean isPaid() {
+            return Objects.nonNull(payment);
+        }
+
+        public void makePayment(Payment payment) {
+            this.payment = payment;
+        }
     }
 }
