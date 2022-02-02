@@ -23,8 +23,8 @@ public class Price {
         return Objects.hash(cents);
     }
 
-    public static Price cents(BigDecimal cents) {
-        return new Price(cents);
+    public static Price cents(BigDecimal valueInCents) {
+        return new Price(valueInCents);
     }
 
     public Price minusCents(BigDecimal subtractAmount) {
