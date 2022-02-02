@@ -33,7 +33,7 @@ public class Booking {
             throw new IllegalStateException("Deposit was already paid for this booking!");
         }
         if (!depositRequest.getRequestedAmount().equals(depositAmount)) {
-            throw new DepositAmountDifferentThanRequestedException(
+            throw new PaidAmountDifferentThanRequestedException(
                     "The requested deposit amount is not equal to the amount deposited by the user");
         }
         depositRequest.makePayment(new Payment(paidBy, depositAmount, Instant.now()));
@@ -62,6 +62,10 @@ public class Booking {
         return false;
     }
 
+    public void makePayment(User paidBy, Price paymentAmount) {
+
+    }
+
     @Value
     public static class User {
         Long id;
@@ -82,8 +86,8 @@ public class Booking {
         }
     }
 
-    public static class DepositAmountDifferentThanRequestedException extends RuntimeException {
-        public DepositAmountDifferentThanRequestedException(String message) {
+    public static class PaidAmountDifferentThanRequestedException extends RuntimeException {
+        public PaidAmountDifferentThanRequestedException(String message) {
             super(message);
         }
     }
