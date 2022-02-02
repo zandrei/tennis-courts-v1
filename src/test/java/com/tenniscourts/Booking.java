@@ -17,7 +17,6 @@ public class Booking {
     private final Player player;
     private final LocalDate bookingDate;
     private final TimeSlot timeSlot;
-    private Payment payment;
     private DepositRequest depositRequest;
 
     public boolean isForDailyScheduleSlot(DailyCourtScheduleSlot dailySlot) {
@@ -37,8 +36,7 @@ public class Booking {
             throw new DepositAmountDifferentThanRequestedException(
                     "The requested deposit amount is not equal to the amount deposited by the user");
         }
-        payment = new Payment(paidBy, depositAmount, Instant.now());
-        depositRequest.makePayment(payment);
+        depositRequest.makePayment(new Payment(paidBy, depositAmount, Instant.now()));
     }
 
     private boolean depositRequested() {
