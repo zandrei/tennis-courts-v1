@@ -36,9 +36,16 @@ class MakeADepositForABookingTest {
         assertThat(booking.isDepositPaid()).isFalse();
     }
 
-    public static class Price {
-        public static Price cents(BigDecimal cents) {
-            return null;
-        }
-    }
+//    @Test
+//    @DisplayName("Returns correct deposit value if a deposit is made for a booking")
+//    void test2() {
+//        final var irrelevantPrice = Price.cents(new BigDecimal(983));
+//        final var booking = new Booking(ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
+//
+//        booking.makeDeposit(IRRELEVANT_USER, irrelevantPrice);
+//
+//        assertThat(booking.getDeposit()).isPresent();
+//        assertThat(booking.getDeposit().get()).isEqualTo(irrelevantPrice);
+//    }
+
 }

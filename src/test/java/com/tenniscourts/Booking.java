@@ -25,7 +25,7 @@ public class Booking {
                 && timeSlot.equals(dailySlot.getTimeSlot());
     }
 
-    public void makeDeposit(User paidBy, MakeADepositForABookingTest.Price depositAmount) {
+    public void makeDeposit(User paidBy, Price depositAmount) {
         payment = new Payment(paidBy, depositAmount, Instant.now());
     }
 
@@ -38,8 +38,4 @@ public class Booking {
         Long id;
     }
 
-    public static class Payment {
-        public Payment(
-                User paidBy, MakeADepositForABookingTest.Price amount, Instant transactionTime) {}
-    }
 }
