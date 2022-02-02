@@ -27,7 +27,7 @@ public class Booking {
     }
 
     public void makeDeposit(User paidBy, Price depositAmount) {
-        if (!depositRequested()) {
+        if (noDepositWasRequested()) {
             throw new IllegalStateException("No deposit was requested for this booking!");
         }
         if (depositRequest.isPaid()) {
@@ -45,8 +45,12 @@ public class Booking {
         return Objects.nonNull(depositRequest);
     }
 
+    private boolean noDepositWasRequested() {
+        return !depositRequested();
+    }
+
     public boolean isDepositPaid() {
-        if (depositRequest == null) {
+        if (noDepositWasRequested()) {
             return false;
         }
         return depositRequest.isPaid();
