@@ -42,7 +42,7 @@ class PlayerReadCourtSchedulesTest {
         final var reservationSystem = new ReservationSystem(courtScheduler);
 
         final var freeDailyScheduleSlots =
-                reservationSystem.getFreeDailyScheduleSlots(TODAY, TODAY.plusDays(7));
+                reservationSystem.getFreeDailyScheduleSlots(TODAY, TODAY.plusDays(6));
         assertThat(freeDailyScheduleSlots).hasSize(1);
         final var freeSlot = freeDailyScheduleSlots.get(0);
         assertThat(freeSlot.getTimeSlot()).isEqualTo(TIME_SLOT_FOR_NOW);
@@ -57,7 +57,7 @@ class PlayerReadCourtSchedulesTest {
         courtScheduler.createScheduleSlot(
                 ARTHUR_ASHE, TIME_SLOT_FOR_NOW, List.of(DayOfWeek.MONDAY));
 
-        var dailyScheduleSlots = courtScheduler.getDailyScheduleSlots(today.minusDays(7), today);
+        var dailyScheduleSlots = courtScheduler.getDailyScheduleSlots(today.minusDays(6), today);
 
         assertThat(dailyScheduleSlots).hasSize(1);
         assertThat(dailyScheduleSlots.get(0).getDay().getDayOfWeek()).isEqualTo(DayOfWeek.MONDAY);
@@ -65,7 +65,7 @@ class PlayerReadCourtSchedulesTest {
         courtScheduler.createScheduleSlot(
                 ARTHUR_ASHE, TIME_SLOT_FOR_NOW, List.of(DayOfWeek.WEDNESDAY));
 
-        dailyScheduleSlots = courtScheduler.getDailyScheduleSlots(today.minusDays(7), today);
+        dailyScheduleSlots = courtScheduler.getDailyScheduleSlots(today.minusDays(6), today);
 
         assertThat(dailyScheduleSlots)
                 .hasSize(2)
@@ -84,7 +84,7 @@ class PlayerReadCourtSchedulesTest {
         courtScheduler.createScheduleSlot(
                 ROD_LAVER, TIME_SLOT_FOR_NOW, List.of(DayOfWeek.MONDAY, DayOfWeek.FRIDAY));
 
-        var dailyScheduleSlots = courtScheduler.getDailyScheduleSlots(today, today.plusDays(14));
+        var dailyScheduleSlots = courtScheduler.getDailyScheduleSlots(today, today.plusDays(13));
 
         assertThat(dailyScheduleSlots).hasSize(6);
 
