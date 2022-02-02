@@ -29,8 +29,7 @@ public class Booking {
     public void makeDeposit(User paidBy, Price depositAmount) {
         if (depositRequested()) {
             payment = new Payment(paidBy, depositAmount, Instant.now());
-        }
-        else throw new IllegalStateException("No deposit was requested for this booking!");
+        } else throw new IllegalStateException("No deposit was requested for this booking!");
     }
 
     private boolean depositRequested() {
@@ -41,12 +40,18 @@ public class Booking {
         return Objects.nonNull(payment);
     }
 
+    public void createDepositRequest(Price requestedAmount) {
+        depositRequest = new DepositRequest(requestedAmount);
+    }
+
     @Value
     public static class User {
         Long id;
     }
 
+    @Value
+    @Getter
     public static class DepositRequest {
-        private Price requestedAmount;
+        Price requestedAmount;
     }
 }

@@ -1,6 +1,5 @@
 package com.tenniscourts;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -21,10 +20,10 @@ class MakeADepositForABookingTest {
 
     @Test
     @DisplayName("Is deposit paid returns true for a booking for which a deposit was made")
-    @Disabled
     void test() {
         final var irrelevantPrice = Price.cents(new BigDecimal(983));
         final var booking = new Booking(ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
+        booking.createDepositRequest(irrelevantPrice);
 
         booking.makeDeposit(IRRELEVANT_USER, irrelevantPrice);
 
