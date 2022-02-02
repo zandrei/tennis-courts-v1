@@ -28,10 +28,10 @@ class MakeADepositForABookingTest {
     @Test
     @DisplayName("Is deposit paid returns true for a booking for which a deposit was made")
     void test() {
-        final var irrelevantPrice = Price.cents(new BigDecimal(983));
-        booking.createDepositRequest(irrelevantPrice);
+        final var requestedDepositAmount = Price.cents(new BigDecimal(983));
+        booking.createDepositRequest(requestedDepositAmount);
 
-        booking.makeDeposit(IRRELEVANT_USER, irrelevantPrice);
+        booking.makeDeposit(IRRELEVANT_USER, requestedDepositAmount);
 
         assertThat(booking.isDepositPaid()).isTrue();
     }
