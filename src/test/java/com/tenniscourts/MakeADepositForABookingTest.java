@@ -1,5 +1,6 @@
 package com.tenniscourts;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -8,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MakeADepositForABookingTest {
 
@@ -19,6 +21,7 @@ class MakeADepositForABookingTest {
 
     @Test
     @DisplayName("Is deposit paid returns true for a booking for which a deposit was made")
+    @Disabled
     void test() {
         final var irrelevantPrice = Price.cents(new BigDecimal(983));
         final var booking = new Booking(ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
@@ -36,16 +39,14 @@ class MakeADepositForABookingTest {
         assertThat(booking.isDepositPaid()).isFalse();
     }
 
-//    @Test
-//    @DisplayName("Returns correct deposit value if a deposit is made for a booking")
-//    void test2() {
-//        final var irrelevantPrice = Price.cents(new BigDecimal(983));
-//        final var booking = new Booking(ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
-//
-//        booking.makeDeposit(IRRELEVANT_USER, irrelevantPrice);
-//
-//        assertThat(booking.getDeposit()).isPresent();
-//        assertThat(booking.getDeposit().get()).isEqualTo(irrelevantPrice);
-//    }
+    @Test
+    @DisplayName(
+            "Throws IllegalStateException if make deposit is called and no deposit request is present")
+    void test2() {
+        final var irrelevantPrice = Price.cents(new BigDecimal(1099));
+        final var booking = new Booking(ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
 
+        assertThatThrownBy(() -> booking.makeDeposit(IRRELEVANT_USER, irrelevantPrice))
+                .isInstanceOf(IllegalStateException.class);
+    }
 }

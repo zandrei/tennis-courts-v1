@@ -18,6 +18,7 @@ public class Booking {
     private final LocalDate bookingDate;
     private final TimeSlot timeSlot;
     private Payment payment;
+    private DepositRequest depositRequest;
 
     public boolean isForDailyScheduleSlot(DailyCourtScheduleSlot dailySlot) {
         return bookingDate.equals(dailySlot.getDay())
@@ -26,7 +27,14 @@ public class Booking {
     }
 
     public void makeDeposit(User paidBy, Price depositAmount) {
-        payment = new Payment(paidBy, depositAmount, Instant.now());
+        if (depositRequested()) {
+            payment = new Payment(paidBy, depositAmount, Instant.now());
+        }
+        else throw new IllegalStateException("No deposit was requested for this booking!");
+    }
+
+    private boolean depositRequested() {
+        return Objects.nonNull(depositRequest);
     }
 
     public boolean isDepositPaid() {
@@ -38,4 +46,7 @@ public class Booking {
         Long id;
     }
 
+    public static class DepositRequest {
+        private Price requestedAmount;
+    }
 }
