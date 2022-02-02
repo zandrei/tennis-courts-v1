@@ -30,11 +30,15 @@ public class Booking {
         if (!depositRequested()) {
             throw new IllegalStateException("No deposit was requested for this booking!");
         }
+        if (depositRequest.isPaid()) {
+            throw new IllegalStateException("Deposit was already paid for this booking!");
+        }
         if (!depositRequest.getRequestedAmount().equals(depositAmount)) {
             throw new DepositAmountDifferentThanRequestedException(
                     "The requested deposit amount is not equal to the amount deposited by the user");
         }
         payment = new Payment(paidBy, depositAmount, Instant.now());
+        depositRequest.makePayment(payment);
     }
 
     private boolean depositRequested() {
@@ -54,10 +58,19 @@ public class Booking {
         Long id;
     }
 
-    @Value
     @Getter
+    @RequiredArgsConstructor
     public static class DepositRequest {
-        Price requestedAmount;
+        final Price requestedAmount;
+        private Payment payment;
+
+        public boolean isPaid() {
+            return Objects.nonNull(payment);
+        }
+
+        public void makePayment(Payment payment) {
+            this.payment = payment;
+        }
     }
 
     public static class DepositAmountDifferentThanRequestedException extends RuntimeException {

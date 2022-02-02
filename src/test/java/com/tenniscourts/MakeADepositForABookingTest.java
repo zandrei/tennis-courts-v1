@@ -77,4 +77,17 @@ class MakeADepositForABookingTest {
                                         requestedDeposit.plusCents(new BigDecimal(125))))
                 .isInstanceOf(Booking.DepositAmountDifferentThanRequestedException.class);
     }
+
+    @Test
+    @DisplayName(
+            "Throws IllegalStateException, trying to make a deposit for a booking for which the correct deposit was already made")
+    void test4() {
+        final var requestedDepositAmount = Price.cents(new BigDecimal(776));
+        booking.createDepositRequest(requestedDepositAmount);
+        booking.makeDeposit(IRRELEVANT_USER, requestedDepositAmount);
+        Price irrelevantPrice = Price.cents(new BigDecimal(1));
+
+        assertThatThrownBy(() -> booking.makeDeposit(IRRELEVANT_USER, irrelevantPrice))
+                .isInstanceOf(IllegalStateException.class);
+    }
 }
