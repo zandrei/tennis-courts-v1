@@ -13,7 +13,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MakeAPaymentForABookingTest {
 
-    private static final Court ARTHUR_ASHE = new Court(1L, "Arthur Ashe");
+    private static final Court ARTHUR_ASHE =
+            new Court(1L, "Arthur Ashe", Price.cents(new BigDecimal(100)));
     private static final TimeSlot EXISTING_TIMESLOT = TimeSlot.of(LocalTime.now());
     private static final LocalDate MONDAY = LocalDate.of(2022, 1, 3);
     private static final Player IRRELEVANT_PLAYER = new Player(10L);
@@ -28,17 +29,18 @@ class MakeAPaymentForABookingTest {
     }
 
     @Test
-    @DisplayName("Throws PaidAmountDifferentThanRequestedException when trying to make a payment for booking with a different amount")
+    @DisplayName(
+            "Throws PaidAmountDifferentThanRequestedException when trying to make a payment for booking with a different amount")
     @Disabled("Refactoring")
     void test1() {
         final var booking = new Booking(ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
         final var requestedPaymentAmount = Price.cents(new BigDecimal(983));
 
         assertThatThrownBy(
-                () ->
-                        booking.makePayment(
-                                IRRELEVANT_USER,
-                                requestedPaymentAmount.minusCents(new BigDecimal(200))))
+                        () ->
+                                booking.makePayment(
+                                        IRRELEVANT_USER,
+                                        requestedPaymentAmount.minusCents(new BigDecimal(200))))
                 .isInstanceOf(Booking.PaidAmountDifferentThanRequestedException.class);
     }
 }

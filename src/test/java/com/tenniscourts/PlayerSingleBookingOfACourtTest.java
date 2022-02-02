@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -18,8 +19,10 @@ class PlayerSingleBookingOfACourtTest {
     private static final Player IRRELEVANT_PLAYER = new Player(10L);
     private static final LocalDate NOT_MONDAY = LocalDate.of(2022, 1, 1);
     private static final LocalDate MONDAY = LocalDate.of(2022, 1, 3);
-    private static final Court ARTHUR_ASHE = new Court(1L, "Arthur Ashe");
-    private static final Court NOT_ARTHUR_ASHE = new Court(2L, "Rod Laver");
+    private static final Court ARTHUR_ASHE =
+            new Court(1L, "Arthur Ashe", Price.cents(new BigDecimal(1122)));
+    private static final Court NOT_ARTHUR_ASHE =
+            new Court(2L, "Rod Laver", Price.cents(new BigDecimal(5621)));
     private static final TimeSlot EXISTING_TIMESLOT = TimeSlot.of(LocalTime.now());
     private static final TimeSlot NON_EXISTENT_TIMESLOT =
             TimeSlot.of(LocalTime.now().minus(1, ChronoUnit.HOURS));

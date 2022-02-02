@@ -8,4 +8,5 @@ import lombok.Value;
 public class Court {
     Long id;
     String name;
+    Price pricePerHour;
 }

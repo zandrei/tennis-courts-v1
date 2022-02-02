@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -15,8 +16,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class PlayerReadCourtSchedulesTest {
 
     private static final TimeSlot TIME_SLOT_FOR_NOW = TimeSlot.of(LocalTime.now());
-    private static final Court ARTHUR_ASHE = new Court(1L, "Arthur Ashe");
-    private static final Court ROD_LAVER = new Court(2L, "Rod Laver");
+    private static final Court ARTHUR_ASHE =
+            new Court(1L, "Arthur Ashe", Price.cents(new BigDecimal(88898)));
+    private static final Court ROD_LAVER =
+            new Court(2L, "Rod Laver", Price.cents(new BigDecimal(77723)));
     private static final LocalDate TODAY = LocalDate.now();
     private CourtScheduler courtScheduler;
 

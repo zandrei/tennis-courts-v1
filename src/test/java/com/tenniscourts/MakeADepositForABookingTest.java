@@ -13,7 +13,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MakeADepositForABookingTest {
 
-    private static final Court ARTHUR_ASHE = new Court(1L, "Arthur Ashe");
+    private static final Court ARTHUR_ASHE =
+            new Court(1L, "Arthur Ashe", Price.cents(new BigDecimal(210)));
     private static final TimeSlot EXISTING_TIMESLOT = TimeSlot.of(LocalTime.now());
     private static final LocalDate MONDAY = LocalDate.of(2022, 1, 3);
     private static final Player IRRELEVANT_PLAYER = new Player(10L);

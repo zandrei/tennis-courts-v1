@@ -3,6 +3,7 @@ package com.tenniscourts;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -19,8 +20,9 @@ class AdminCreateScheduleSlotTest {
     private static final TimeSlot ONE_HOUR_AGO_TIME_SLOT =
             TimeSlot.of(NOW.minus(1, ChronoUnit.HOURS));
     public static final List<DayOfWeek> ONLY_MONDAY = List.of(DayOfWeek.MONDAY);
-    private final Court arthurAshe = new Court(1L, "Arthur Ashe");
-    private final Court rodLaver = new Court(2L, "Rod Laver");
+    private final Court arthurAshe =
+            new Court(1L, "Arthur Ashe", Price.cents(new BigDecimal(3243)));
+    private final Court rodLaver = new Court(2L, "Rod Laver", Price.cents(new BigDecimal(2223)));
 
     @Test
     @DisplayName(
