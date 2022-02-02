@@ -1,6 +1,5 @@
 package com.tenniscourts;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +30,6 @@ class MakeAPaymentForABookingTest {
     @Test
     @DisplayName(
             "Throws PaidAmountDifferentThanRequestedException when trying to make a payment for booking with a different amount")
-    @Disabled("Refactoring")
     void test1() {
         final var booking = new Booking(ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
         final var requestedPaymentAmount = Price.cents(new BigDecimal(983));
@@ -41,6 +39,13 @@ class MakeAPaymentForABookingTest {
                                 booking.makePayment(
                                         IRRELEVANT_USER,
                                         requestedPaymentAmount.minusCents(new BigDecimal(200))))
+                .isInstanceOf(Booking.PaidAmountDifferentThanRequestedException.class);
+
+        assertThatThrownBy(
+                        () ->
+                                booking.makePayment(
+                                        IRRELEVANT_USER,
+                                        requestedPaymentAmount.plusCents(new BigDecimal(111))))
                 .isInstanceOf(Booking.PaidAmountDifferentThanRequestedException.class);
     }
 }

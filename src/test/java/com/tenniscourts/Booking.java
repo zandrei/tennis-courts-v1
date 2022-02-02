@@ -9,7 +9,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Objects;
 
-@RequiredArgsConstructor
 @Getter
 @EqualsAndHashCode
 public class Booking {
@@ -18,6 +17,15 @@ public class Booking {
     private final LocalDate bookingDate;
     private final TimeSlot timeSlot;
     private DepositRequest depositRequest;
+    private PaymentRequest paymentRequest;
+
+    Booking(Court court, Player player, LocalDate bookingDate, TimeSlot timeSlot) {
+        this.court = court;
+        this.player = player;
+        this.bookingDate = bookingDate;
+        this.timeSlot = timeSlot;
+        paymentRequest = new PaymentRequest(court.getPricePerHour());
+    }
 
     public boolean isForDailyScheduleSlot(DailyCourtScheduleSlot dailySlot) {
         return bookingDate.equals(dailySlot.getDay())
@@ -63,7 +71,11 @@ public class Booking {
     }
 
     public void makePayment(User paidBy, Price paymentAmount) {
-
+        Objects.requireNonNull(paymentRequest);
+        if (!paymentRequest.getRequestedAmount().equals(paymentAmount)) {
+            throw new PaidAmountDifferentThanRequestedException(
+                    "The requested payment amount is not equal to the amount paid by the user");
+        }
     }
 
     @Value
@@ -90,5 +102,12 @@ public class Booking {
         public PaidAmountDifferentThanRequestedException(String message) {
             super(message);
         }
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    public static class PaymentRequest {
+        final Price requestedAmount;
+        private Payment payment;
     }
 }
