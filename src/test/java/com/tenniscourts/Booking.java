@@ -17,7 +17,7 @@ public class Booking {
     private final LocalDate bookingDate;
     private final TimeSlot timeSlot;
     private DepositRequest depositRequest;
-    private PaymentRequest paymentRequest;
+    private final PaymentRequest paymentRequest;
 
     Booking(Court court, Player player, LocalDate bookingDate, TimeSlot timeSlot) {
         this.court = court;
@@ -72,6 +72,9 @@ public class Booking {
 
     public void makePayment(User paidBy, Price paymentAmount) {
         Objects.requireNonNull(paymentRequest);
+        if (paymentRequest.isPaid()) {
+            throw new IllegalStateException("Payment was already done for this booking!");
+        }
         if (!paymentRequest.getRequestedAmount().equals(paymentAmount)) {
             throw new PaidAmountDifferentThanRequestedException(
                     "The requested payment amount is not equal to the amount paid by the user");

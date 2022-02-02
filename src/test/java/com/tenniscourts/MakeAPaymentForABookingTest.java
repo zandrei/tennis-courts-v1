@@ -53,12 +53,28 @@ class MakeAPaymentForABookingTest {
     }
 
     @Test
-    @DisplayName("Is booking paid returns true if exact payment of the court cost per hour is performed")
+    @DisplayName(
+            "Is booking paid returns true if exact payment of the court cost per hour is performed")
     void test2() {
         final var booking = new Booking(ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
 
         booking.makePayment(IRRELEVANT_USER, ARTHUR_ASHE_COST_PER_HOUR);
 
         assertThat(booking.isPaid()).isTrue();
+    }
+
+    @Test
+    @DisplayName(
+            "Throws IllegalStateException, trying to make a payment for a booking for which the correct payment was already made")
+    void test3() {
+        final var booking = new Booking(ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
+
+        booking.makePayment(IRRELEVANT_USER, ARTHUR_ASHE_COST_PER_HOUR);
+
+        assertThat(booking.isPaid()).isTrue();
+
+        final var irrelevantPrice = Price.cents(new BigDecimal(0));
+        assertThatThrownBy(() -> booking.makePayment(IRRELEVANT_USER, irrelevantPrice))
+                .isInstanceOf(IllegalStateException.class);
     }
 }
