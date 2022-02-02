@@ -58,6 +58,10 @@ public class Booking {
         depositRequest = new DepositRequest(requestedAmount);
     }
 
+    public boolean isPaid() {
+        return false;
+    }
+
     @Value
     public static class User {
         Long id;
