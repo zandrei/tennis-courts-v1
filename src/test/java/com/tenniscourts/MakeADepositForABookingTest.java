@@ -48,4 +48,21 @@ class MakeADepositForABookingTest {
         assertThatThrownBy(() -> booking.makeDeposit(IRRELEVANT_USER, irrelevantPrice))
                 .isInstanceOf(IllegalStateException.class);
     }
+
+    @Test
+    @DisplayName(
+            "Throws DepositAmountDifferentThanRequestedException if trying to make a deposit for a booking with a different value than the request value")
+    void test3() {
+
+        final var requestedDeposit = Price.cents(new BigDecimal(8612));
+        final var booking = new Booking(ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
+        booking.createDepositRequest(requestedDeposit);
+
+        assertThatThrownBy(
+                        () ->
+                                booking.makeDeposit(
+                                        IRRELEVANT_USER,
+                                        requestedDeposit.minusCents(new BigDecimal(200))))
+                .isInstanceOf(Booking.DepositAmountDifferentThanRequestedException.class);
+    }
 }
