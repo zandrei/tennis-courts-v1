@@ -1,5 +1,6 @@
 package com.tenniscourts;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -17,12 +18,17 @@ class MakeADepositForABookingTest {
     private static final LocalDate MONDAY = LocalDate.of(2022, 1, 3);
     private static final Player IRRELEVANT_PLAYER = new Player(10L);
     private static final Booking.User IRRELEVANT_USER = new Booking.User(255L);
+    private Booking booking;
+
+    @BeforeEach
+    void setUp() {
+        booking = new Booking(ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
+    }
 
     @Test
     @DisplayName("Is deposit paid returns true for a booking for which a deposit was made")
     void test() {
         final var irrelevantPrice = Price.cents(new BigDecimal(983));
-        final var booking = new Booking(ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
         booking.createDepositRequest(irrelevantPrice);
 
         booking.makeDeposit(IRRELEVANT_USER, irrelevantPrice);
@@ -53,7 +59,6 @@ class MakeADepositForABookingTest {
     @DisplayName(
             "Throws DepositAmountDifferentThanRequestedException if trying to make a deposit for a booking with a different value than the request value")
     void test3() {
-
         final var requestedDeposit = Price.cents(new BigDecimal(8612));
         final var booking = new Booking(ARTHUR_ASHE, IRRELEVANT_PLAYER, MONDAY, EXISTING_TIMESLOT);
         booking.createDepositRequest(requestedDeposit);
