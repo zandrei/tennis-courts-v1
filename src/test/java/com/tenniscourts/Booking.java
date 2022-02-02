@@ -46,7 +46,10 @@ public class Booking {
     }
 
     public boolean isDepositPaid() {
-        return Objects.nonNull(payment);
+        if (depositRequest == null) {
+            return false;
+        }
+        return depositRequest.isPaid();
     }
 
     public void createDepositRequest(Price requestedAmount) {
